@@ -9,3 +9,11 @@ export const Login = AppLoader(
 export const Register = AppLoader(
   lazy(() => import('../../pages/Register/Register'))
 );
+
+export const productView = AppLoader(
+  lazy(() => import('../../pages/Products/ProductView'))
+);
+
+export const products = AppLoader(
+  lazy(() => import('../../pages/Products/ProductsIndex'))
+);

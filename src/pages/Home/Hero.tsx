@@ -5,17 +5,24 @@ import WomenImg from '../../Assets/images/shopping-women.jpg';
 import { useSelector } from 'react-redux';
 import { useToast } from '../../features/Toast/ToastContext';
 import Modal from '../../components/Modal/Modal';
+import { RootState } from '../../store';
+import { useGetProductsQuery } from '../../features/services/RTK/Api';
+import women2 from '../../Assets/images/women-1.jpg';
+import heroImg1 from '../../Assets/images/cloths-men.jpg';
+import heroImg2 from '../../Assets/images/shopping-bag.jpg';
+import urbanMen from '../../Assets/images/urban-men.jpg';
 
 export default function Hero() {
   const [isOpen, setIsOpen] = useState(false);
-  const item = useSelector((state: any) => state.products.products);
-  const ClothsItems = item?.filter(
-    (el: any, index: number) => el?.category === 'fashion'
-  );
-  const ElectronicsItems = item?.filter(
+  const { data: item } = useGetProductsQuery('');
+  const ClothsItems =
+    item?.products?.filter(
+      (el: any, index: number) => el?.category === 'fashion'
+    ) ?? [];
+  const ElectronicsItems = item?.products?.filter(
     (el: any, index: number) => el?.category === 'electronics'
   );
-  const OthersItems = item?.filter(
+  const OthersItems = item?.products?.filter(
     (el: any, index: number) =>
       el?.category !== 'fashion' && el?.category !== 'electronics'
   );
@@ -58,7 +65,7 @@ export default function Hero() {
             <div className="relative overflow-hidden rounded-lg shadow-lg cursor-pointer">
               <img
                 className="relative w-full h-[270px] object-cover brightness-[0.5]"
-                // src={require('../../Assets/images/women-1.jpg')}
+                src={women2}
                 alt="Flower and sky"
               />
 
@@ -84,7 +91,7 @@ export default function Hero() {
             <div className="relative overflow-hidden rounded-lg shadow-lg cursor-pointer">
               <img
                 className="relative w-full h-[270px] object-cover brightness-[0.5]"
-                // src={require('../../Assets/images/cloths-men.jpg')}
+                src={heroImg1}
                 alt="Flower and sky"
               />
 
@@ -110,7 +117,7 @@ export default function Hero() {
             <div className="relative overflow-hidden rounded-lg shadow-lg cursor-pointer">
               <img
                 className="relative w-full h-[270px] object-cover brightness-[0.5]"
-                // src={require('../../Assets/images/urban-men.jpg')}
+                src={urbanMen}
                 alt="Flower and sky"
               />
 
@@ -136,7 +143,7 @@ export default function Hero() {
             <div className="relative overflow-hidden rounded-lg shadow-lg cursor-pointer">
               <img
                 className="relative w-full h-[270px] object-cover brightness-[0.5]"
-                // src={require('../../Assets/images/shopping-bag.jpg')}
+                src={heroImg2}
                 alt="Flower and sky"
               />
 

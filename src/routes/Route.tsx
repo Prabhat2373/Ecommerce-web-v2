@@ -45,9 +45,9 @@ export const AllPages = () => {
     },
     {
       element: (
-        <>
+        <ProtectedRoute>
           <Outlet />
-        </>
+        </ProtectedRoute>
       ),
     },
     ...publicRoutes,

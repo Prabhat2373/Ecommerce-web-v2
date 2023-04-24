@@ -18,14 +18,16 @@ import { AllPages } from './routes/Route';
 import { ToastContextProvider } from './features/Toast/ToastContext';
 import AuthServices from './utils/Utils';
 import { Cart } from './features/Slices/CartSlice';
+import { RootState } from './store';
 
 function App() {
   const { getToken } = new AuthServices();
   const all_pages = useRoutes(AllPages());
   const UserEmail = String(window?.localStorage.getItem('user_email'));
+  const user = useSelector((state: RootState) => state.user.payload);
   const { data: CurrentUser } = useGetCurrentUserQuery(UserEmail);
   const { data: CartItems } = useGetAllCartQuery(CurrentUser?.user?._id);
-  console.log(CurrentUser);
+  console.log('current', CurrentUser);
 
   const dispatch = useDispatch();
   const { data: ProductPayload } = useGetProductsQuery('');
@@ -35,10 +37,11 @@ function App() {
       console.log('not logged in');
     } else {
       dispatch(Products(ProductPayload?.products ?? []));
-      dispatch(User(CurrentUser));
+      dispatch(User(CurrentUser?.user));
       dispatch(Cart(CartItems?.payload));
     }
   }, [ProductPayload, CurrentUser, dispatch]);
+  console.log('USERRR', user);
   return (
     <React.Fragment>
       <ToastContextProvider>{all_pages}</ToastContextProvider>

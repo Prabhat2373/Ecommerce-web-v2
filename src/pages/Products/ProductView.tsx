@@ -179,42 +179,23 @@ const ProductView = () => {
               </div>
             </div>
           </div>
-          <div className="border border-b-gray-600 flex w-full my-5 flex-col">
-            <div className="flex w-full justify-between">
+          <div className="grid col-span-3 border border-b-gray-600 w-full my-5 flex-col p-4">
+            <div className="flex w-full justify-between items-center py-4">
               <h1 className="font-meduim text-2xl">Reviews</h1>
               <button
-                className="mt-6 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-8 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                className="mt-6 flex items-center justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-8 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 onClick={() => setIsOpen((prev) => !prev)}
               >
                 Add Review
               </button>
             </div>
             {productReviews?.map((item: any) => {
-              console.log('rattt', !!ratings && Math.ceil(ratings));
-
               return (
                 <>
                   <div className="flex w-full flex-col">
                     <div className="flex w-full">
                       <div className="rating flex w-full">
-                        {[1, 2, 3, 4, 5]?.map((el: any) => {
-                          console.log('ellll', el);
-
-                          return (
-                            <>
-                              <StarIcon
-                                key={item}
-                                className={classNames(
-                                  Math.ceil(item.rating) >= el
-                                    ? 'text-gray-900'
-                                    : 'text-gray-200',
-                                  'h-5 w-5 flex-shrink-0'
-                                )}
-                                aria-hidden="true"
-                              />
-                            </>
-                          );
-                        })}
+                        <StarRating initialRating={item.rating} readonly />
                       </div>
                       <div className="">
                         <span>{item.rating} out of 5 stars</span>

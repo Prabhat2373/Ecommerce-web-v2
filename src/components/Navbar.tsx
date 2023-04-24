@@ -25,7 +25,7 @@ const Navbar = () => {
   const Products = useSelector((state: any) => state.products.products);
   console.log('productssss', Products);
   useEffect(() => {
-    setCartData(CartItems);
+    setCartData(CartItems?.payload);
     setPath(link);
     setSearchRes(Products);
   }, [CartItems, Products, link]);
@@ -178,9 +178,9 @@ const Navbar = () => {
                     />
                   </svg>
 
-                  {CartData?.payload?.length > 0 ? (
+                  {CartData?.length > 0 ? (
                     <span className="absolute -top-3 left-3 rounded-full bg-indigo-500 text-white p-1 text-xs w-5 h-5 text-center">
-                      {CartData?.payload?.length}
+                      {CartData?.length}
                     </span>
                   ) : (
                     ''

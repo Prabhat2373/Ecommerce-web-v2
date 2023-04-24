@@ -10,25 +10,6 @@ export const routes = [
     iconClass: DashboardIcon,
     displayName: 'Dashboard',
     element: <Lazyelement.Home />,
-    subMenu: [
-      {
-        path: '/user',
-        exact: true,
-        id: 'profile',
-        element: <Lazyelement.Login />,
-        displayName: 'profile',
-        iconClass: DashboardIcon,
-        isHidden: false,
-      },
-      {
-        path: '/user/create',
-        exact: true,
-        id: 'user-create',
-        element: <Lazyelement.Register />,
-        displayName: 'profile Edit',
-        isHidden: false,
-      },
-    ],
   },
   {
     path: '/login',
@@ -37,5 +18,21 @@ export const routes = [
     iconClass: DashboardIcon,
     displayName: 'files',
     element: <Lazyelement.Login />,
+  },
+  {
+    path: '/view/:id',
+    exact: true,
+    id: 'files',
+    iconClass: DashboardIcon,
+    displayName: 'files',
+    element: <Lazyelement.productView />,
+  },
+  {
+    path: '/products',
+    exact: true,
+    id: 'files',
+    iconClass: DashboardIcon,
+    displayName: 'files',
+    element: <Lazyelement.products />,
   },
 ];

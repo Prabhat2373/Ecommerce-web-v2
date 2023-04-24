@@ -65,7 +65,7 @@ const StarRating = ({
     );
   });
 
-  return <div>{starsArray}</div>;
+  return <div className="flex">{starsArray}</div>;
 };
 
 export default StarRating;

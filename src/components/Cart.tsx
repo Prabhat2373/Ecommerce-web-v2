@@ -107,59 +107,64 @@ export default function Cart({ isOpen, setOpen }: Props) {
                                     No Items
                                   </div>
                                 ) : (
-                                  CartData?.map((products: any) => (
-                                    <li
-                                      key={products.name + 1}
-                                      className="flex py-6"
-                                    >
-                                      <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                        <img
-                                          src={products?.image}
-                                          alt={'alternative'}
-                                          className="h-full w-full object-cover object-center"
-                                        />
-                                      </div>
+                                  CartData?.map((products: any) => {
+                                    console.log('producttds', products);
+                                    return (
+                                      <li
+                                        key={products.name + 1}
+                                        className="flex py-6"
+                                      >
+                                        <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                                          <img
+                                            src={products?.image}
+                                            alt={'alternative'}
+                                            className="h-full w-full object-cover object-center"
+                                          />
+                                        </div>
 
-                                      <div className="ml-4 flex flex-1 flex-col">
-                                        <div>
-                                          <div className="flex justify-between text-base font-medium text-gray-900">
-                                            <h3>
-                                              <a href={'/'}>{products.name}</a>
-                                            </h3>
-                                            <p className="ml-4">
-                                              ₹ {products.price}
+                                        <div className="ml-4 flex flex-1 flex-col">
+                                          <div>
+                                            <div className="flex justify-between text-base font-medium text-gray-900">
+                                              <h3>
+                                                <a href={'/'}>
+                                                  {products.name}
+                                                </a>
+                                              </h3>
+                                              <p className="ml-4">
+                                                ₹ {products.price}
+                                              </p>
+                                            </div>
+                                            <p className="mt-1 text-sm text-gray-500">
+                                              {products?.name}
                                             </p>
                                           </div>
-                                          <p className="mt-1 text-sm text-gray-500">
-                                            {products?.name}
-                                          </p>
-                                        </div>
-                                        <div className="flex flex-1 items-end justify-between text-sm">
-                                          <p className="text-gray-500">
-                                            Qty {products.quantity}
-                                          </p>
+                                          <div className="flex flex-1 items-end justify-between text-sm">
+                                            <p className="text-gray-500">
+                                              Qty {products.quantity}
+                                            </p>
 
-                                          <div className="flex">
-                                            <button
-                                              className="font-medium text-indigo-600 hover:text-indigo-500"
-                                              id={products?._id}
-                                              onClick={(e) => {
-                                                remove(products?._id);
-                                                setProductId(
-                                                  e?.currentTarget?.id
-                                                );
-                                              }}
-                                            >
-                                              {isLoading &&
-                                              products?._id === productId
-                                                ? 'Loading...'
-                                                : 'Remove'}
-                                            </button>
+                                            <div className="flex">
+                                              <button
+                                                className="font-medium text-indigo-600 hover:text-indigo-500"
+                                                id={products?._id}
+                                                onClick={(e) => {
+                                                  remove(products?._id);
+                                                  setProductId(
+                                                    e?.currentTarget?.id
+                                                  );
+                                                }}
+                                              >
+                                                {isLoading &&
+                                                products?._id === productId
+                                                  ? 'Loading...'
+                                                  : 'Remove'}
+                                              </button>
+                                            </div>
                                           </div>
                                         </div>
-                                      </div>
-                                    </li>
-                                  ))
+                                      </li>
+                                    );
+                                  })
                                 )}
                               </ul>
                             </div>

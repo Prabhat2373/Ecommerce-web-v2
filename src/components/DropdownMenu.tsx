@@ -9,6 +9,8 @@ import AdminAuth from '../features/auth/AdminAuth';
 import { LogoutUser, User } from '../features/Slices/AppSlice';
 import { UserType } from '../features/Slices/AppSlice';
 
+import dummyImg from '../Assets/images/user-image.jpg';
+
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ');
 }
@@ -40,7 +42,7 @@ export default function DropDownMenu(user: UserType | any) {
           <div className="overflow-hidden rounded-full ">
             {
               <img
-                src={user?.user?.avatar?.url}
+                src={user?.user?.avatar?.url ?? dummyImg}
                 alt="user profile"
                 className="w-10 object-fill aspect-square rounded-full"
               />
