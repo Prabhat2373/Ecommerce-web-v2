@@ -59,8 +59,8 @@ export interface Image {
 
 export interface Cart {
   _id: string;
-  userId: string;
-  productId: string;
+  user: string;
+  product: string;
   name: string;
   price: string;
   quantity: string;

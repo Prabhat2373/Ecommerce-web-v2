@@ -5,8 +5,8 @@ type CheckoutState = 'LOADING' | 'READY' | 'ERROR';
 
 export interface CartItem {
   _id: string;
-  userId: string;
-  productId: string;
+  user: string;
+  product: string;
   name: string;
   price: string;
   quantity: string;

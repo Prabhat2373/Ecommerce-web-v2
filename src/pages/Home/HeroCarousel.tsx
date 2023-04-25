@@ -37,11 +37,12 @@ export default function HeroCarousel({ data }: CarouselProps) {
     AddToCart({
       payload: {
         name: product?.name,
-        productId: product?._id,
+        product: product?._id,
         description: product?.description,
         price: product?.price,
         image: product?.images?.[0]?.url,
         quantity: quantity,
+        user: User?._id,
       },
       id,
     }).then(() => {

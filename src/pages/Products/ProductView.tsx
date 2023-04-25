@@ -224,7 +224,7 @@ const ProductView = () => {
                 const formData = new FormData();
                 formData.append('rating', formRating.toString());
                 formData.append('comment', data.comment);
-                formData.append('productId', productId ? productId : '');
+                formData.append('product', productId ? productId : '');
 
                 PostReview(formData)
                   .then((res) => {
