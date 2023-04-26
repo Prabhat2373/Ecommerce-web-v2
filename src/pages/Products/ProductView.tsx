@@ -15,10 +15,8 @@ import Carousel from '../../components/carousel/Carousel';
 import Modal from '../../components/Modal/Modal';
 import StarRating from '../../components/Stars/StarRating';
 import { useForm } from 'react-hook-form';
-
-function classNames(...classes: any) {
-  return classes.filter(Boolean).join(' ');
-}
+import { useToast } from '../../features/Toast/ToastContext';
+import userImage from '../../Assets/images/user-image.jpg';
 
 const ProductView = () => {
   const query = useParams();
@@ -37,10 +35,9 @@ const ProductView = () => {
   const [ratings, setRatings] = useState(0);
   const { data: AllCart, refetch: FetchCart } = useGetAllCartQuery(id);
   const [formRating, setFormRating] = useState<number>(0);
+  const toast = useToast();
 
   const { register, handleSubmit } = useForm();
-  console.log('ussssss', User);
-  console.log('ALL CART', AllCart);
 
   function AddCart(quantity: any) {
     setIsLoading(true);
@@ -65,11 +62,6 @@ const ProductView = () => {
   React.useEffect(() => {
     setProductReviews(GetReviews?.reviews);
   }, [GetReviews]);
-  console.log('PRODUCT', ProductById);
-  console.log('reviews', productReviews, GetReviews);
-  console.log('ratings', ProductById?.product?.ratings);
-  console.log('proooo', Product);
-  console.log('ratngggg', ratings);
 
   return (
     <div className="bg-white">
@@ -96,11 +88,7 @@ const ProductView = () => {
               <h3 className="sr-only">Reviews</h3>
               <div className="flex items-center">
                 <div className="flex items-center">
-                  <StarRating
-                    initialRating={ratings}
-                    readonly
-                    onChange={(rating) => console.log('rating', rating)}
-                  />
+                  <StarRating initialRating={ratings} readonly />
                 </div>
                 <p className="sr-only">{Product?.ratings} out of 5 stars</p>
                 <a className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500">
@@ -128,7 +116,10 @@ const ProductView = () => {
                 />
               </div>
               <button
-                className={`mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-8 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 `}
+                disabled={quantity <= 0}
+                className={`mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-8 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 
+                 disabled:bg-gray-400 disabled:cursor-not-allowed
+                `}
                 onClick={(e) => {
                   e?.preventDefault();
                   AddCart(quantity ?? 1);
@@ -192,18 +183,33 @@ const ProductView = () => {
             {productReviews?.map((item: any) => {
               return (
                 <>
-                  <div className="flex w-full flex-col">
-                    <div className="flex w-full">
+                  <div className="flex w-full flex-col border rounded-md p-4 m-2 border-gray-800 gap-3">
+                    <div className="flex flex-col">
+                      <div className="flex gap-3">
+                        <img
+                          src={userImage}
+                          alt=""
+                          width={50}
+                          height={50}
+                          className="rounded-md"
+                        />
+                        <h1 className="my-3 font-medium text-xl">
+                          {item.name}
+                        </h1>
+                      </div>
+                    </div>
+                    <div className="flex w-full gap-3">
                       <div className="rating flex w-full">
                         <StarRating initialRating={item.rating} readonly />
                       </div>
-                      <div className="">
-                        <span>{item.rating} out of 5 stars</span>
+                      <div className="flex">
+                        <span className="inline font-medium text-base">
+                          {item.rating} out of 5 stars
+                        </span>
                       </div>
                     </div>
-                    <div className="flex flex-col">
-                      <h1 className="my-3 font-medium text-xl">{item.name}</h1>
-                      <p className="font-serif text-base">
+                    <div>
+                      <p className="font-serif text-lg ">
                         {item.comment ?? 'N.A'}
                       </p>
                     </div>
@@ -219,25 +225,24 @@ const ProductView = () => {
           <>
             <form
               onSubmit={handleSubmit((data) => {
-                console.log('data', data);
-                console.log('ratttttttt', formRating);
                 const formData = new FormData();
                 formData.append('rating', formRating.toString());
                 formData.append('comment', data.comment);
-                formData.append('product', productId ? productId : '');
+                formData.append('productId', productId ? productId : '');
 
                 PostReview(formData)
-                  .then((res) => {
-                    console.log('response', res);
+                  .then((res: any) => {
+                    toast.open(res?.data?.message);
+                    setIsOpen(false);
                   })
                   .catch((err) => {
-                    console.log('err', err?.message);
+                    toast.open(err?.message);
                   });
               })}
             >
-              <div>
+              <div className="flex flex-col gap-4">
                 <div>
-                  <span>Rate This Product</span>
+                  <span className="font-medium text-lg">Rate This Product</span>
                   <div>
                     <StarRating
                       initialRating={0}
@@ -246,15 +251,21 @@ const ProductView = () => {
                   </div>
                 </div>
                 <div>
+                  <label
+                    htmlFor="message"
+                    className="block mb-2 text-sm font-medium  "
+                  >
+                    Your message
+                  </label>
                   <textarea
                     {...register('comment')}
-                    id="comment"
-                    cols={20}
-                    rows={5}
+                    rows={4}
+                    className="block p-2.5 w-full text-sm  bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500   "
+                    placeholder="Write your Review here..."
                   ></textarea>
                 </div>
                 <div>
-                  <button className="px-4 py-2 bg-blue-500 rounded-lg">
+                  <button className="px-4 py-2 bg-blue-500 rounded-lg text-white">
                     Submit
                   </button>
                 </div>

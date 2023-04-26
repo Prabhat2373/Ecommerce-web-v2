@@ -20,10 +20,7 @@ export default function Login() {
     setIsLoading(true);
     Login(data)
       .then((response: any) => {
-        console.log('RESPONSE', response?.data?.user?.email);
         setIsLoading(false);
-        console.log('SUCCESS!');
-        // showToast('Logged In Successfully');
         window.localStorage.setItem('token', response?.data?.token);
         window.localStorage.setItem('user_email', response?.data?.user?.email);
         console.log('User', response?.data?.user);

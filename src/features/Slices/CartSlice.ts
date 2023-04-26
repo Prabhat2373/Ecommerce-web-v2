@@ -1,8 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 // import { checkout, CartItems } from '../../app/api';
 
-type CheckoutState = 'LOADING' | 'READY' | 'ERROR';
-
 export interface CartItem {
   _id: string;
   user: string;

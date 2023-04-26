@@ -1,11 +1,7 @@
 import React, { Suspense } from 'react';
 import { Routes, Route, useRoutes } from 'react-router-dom';
 import './App.css';
-import Navbar from './components/Nabar';
-import Loading from './components/Loading';
-import ProtectedRoute from './features/auth/ProtectedRoute';
-import Footer from './components/Footer';
-import Toast from './components/Toast';
+
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import {
   useGetAllCartQuery,
@@ -42,6 +38,8 @@ function App() {
     }
   }, [ProductPayload, CurrentUser, dispatch]);
   console.log('USERRR', user);
+  console.log('appcartttt',CartItems);
+  
   return (
     <React.Fragment>
       <ToastContextProvider>{all_pages}</ToastContextProvider>

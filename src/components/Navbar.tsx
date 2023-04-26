@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FiSearch } from 'react-icons/fi';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import Cart from './Cart';
+
 import { useGetAllCartQuery } from '../features/services/RTK/Api';
 import SearchBar from './SearchBar';
 import { useSelector } from 'react-redux';
@@ -9,6 +9,7 @@ import { StarIcon } from '@heroicons/react/24/outline';
 import { Product } from '../Types/Products';
 import { GetRatings } from '../Helper/Helper';
 import DropDownMenu from './DropdownMenu';
+import CartComp from './Cart';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -155,7 +156,7 @@ const Navbar = () => {
               >
                 <FiSearch />
               </div>
-              {<Cart isOpen={isOpen} setOpen={setIsOpen} />}
+              {<CartComp isOpen={isOpen} setOpen={setIsOpen} />}
               <div className="flex justify-center md:block">
                 <p
                   className="relative text-gray-700 hover:text-gray-600 cursor-pointer"

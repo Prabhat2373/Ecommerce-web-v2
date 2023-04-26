@@ -35,4 +35,12 @@ export const routes = [
     displayName: 'files',
     element: <Lazyelement.products />,
   },
+  {
+    path: '/profile',
+    exact: true,
+    id: 'files',
+    iconClass: DashboardIcon,
+    displayName: 'files',
+    element: <Lazyelement.profile />,
+  },
 ];

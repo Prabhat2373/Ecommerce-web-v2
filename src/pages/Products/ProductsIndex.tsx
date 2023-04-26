@@ -422,7 +422,11 @@ export default function CollectionsFilter() {
                   ))
                 ) : (
                   <div className="flex w-full justify-center">
-                    <Loading />
+                    {isProductLoading ? (
+                      <Loading />
+                    ) : (
+                      <span>No Result Found</span>
+                    )}
                   </div>
                 )}
               </div>

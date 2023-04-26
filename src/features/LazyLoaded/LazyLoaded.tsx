@@ -17,3 +17,7 @@ export const productView = AppLoader(
 export const products = AppLoader(
   lazy(() => import('../../pages/Products/ProductsIndex'))
 );
+
+export const profile = AppLoader(
+  lazy(() => import('../../pages/Admin/Profile'))
+);

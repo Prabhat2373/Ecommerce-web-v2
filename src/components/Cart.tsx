@@ -11,38 +11,38 @@ import { useNavigate } from 'react-router-dom';
 import { isLoggedIn } from '../features/Slices/AppSlice';
 import { RootState } from '../store';
 import { UserType } from '../interfaces/Payload';
+import { Cart } from '../features/Slices/CartSlice';
 
 interface Props {
   isOpen: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
-export default function Cart({ isOpen, setOpen }: Props) {
+export default function CartComp({ isOpen, setOpen }: Props) {
   const [productId, setProductId] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const User: any = useSelector((state: RootState) => state.user.payload);
-  const { LoggedIn } = useSelector((state: RootState) => state.user.user);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [removeItem] = useRemoveCartItemMutation();
-  const { data: CartItems, refetch: FetchMore } = useGetAllCartQuery(User?._id);
-  const [CartData, setCartData] = useState<Product[]>([]);
-  useEffect(() => {
-    if (LoggedIn) {
-      setCartData(CartItems?.payload);
-      FetchMore();
-    }
-  }, [CartItems]);
+  const { data: cartData, refetch: FetchMore } = useGetAllCartQuery(User?._id);
+
+  const CartItems = useSelector((state: RootState) => state.cart.items);
 
   function remove(id: number) {
     setIsLoading(true);
     removeItem(id).then(() => {
-      FetchMore();
-
+      FetchMore().then((data) => {
+        console.log('fetchedddataa', data);
+        dispatch(Cart(data?.data?.payload));
+      });
       setIsLoading(false);
     });
   }
+  useEffect(() => {
+    dispatch(Cart(cartData?.payload));
+  }, [removeItem, cartData, CartItems]);
 
-  console.log('cart data', CartData);
-  const SubTotal = CartData?.reduce((item: any, price: any) => {
+  const SubTotal = CartItems?.reduce((item: any, price: any) => {
     return Number(price?.price) + item;
   }, 0);
   return (
@@ -102,12 +102,12 @@ export default function Cart({ isOpen, setOpen }: Props) {
                                 role="list"
                                 className="-my-6 divide-y divide-gray-200"
                               >
-                                {!CartData ? (
+                                {!CartItems || !CartItems?.length ? (
                                   <div className="h-full flex justify-center items-center">
                                     No Items
                                   </div>
                                 ) : (
-                                  CartData?.map((products: any) => {
+                                  CartItems?.map((products: any) => {
                                     console.log('producttds', products);
                                     return (
                                       <li
@@ -146,16 +146,16 @@ export default function Cart({ isOpen, setOpen }: Props) {
                                             <div className="flex">
                                               <button
                                                 className="font-medium text-indigo-600 hover:text-indigo-500"
-                                                id={products?._id}
+                                                id={products?.product}
                                                 onClick={(e) => {
-                                                  remove(products?._id);
+                                                  remove(products?.product);
                                                   setProductId(
                                                     e?.currentTarget?.id
                                                   );
                                                 }}
                                               >
                                                 {isLoading &&
-                                                products?._id === productId
+                                                products?.product === productId
                                                   ? 'Loading...'
                                                   : 'Remove'}
                                               </button>

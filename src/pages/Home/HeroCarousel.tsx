@@ -15,8 +15,9 @@ import {
   useRemoveCartItemMutation,
 } from '../../features/services/RTK/Api';
 import { ProductType } from '../../interfaces/Payload';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { GetRatings } from '../../Helper/Helper';
+import { Cart } from '../../features/Slices/CartSlice';
 interface CarouselProps {
   data?: any;
 }
@@ -31,6 +32,7 @@ export default function HeroCarousel({ data }: CarouselProps) {
   const { data: AllCart, refetch: FetchCart } = useGetAllCartQuery(User?._id);
   const [isLoading, setIsLoading] = useState(false);
   const [CartId, setCartId] = useState('');
+  const dispatch = useDispatch();
   function AddCart(product: ProductType, quantity: string | number) {
     console.log('product hero', product);
     setIsLoading(true);
@@ -46,19 +48,13 @@ export default function HeroCarousel({ data }: CarouselProps) {
       },
       id,
     }).then(() => {
-      FetchCart();
+      FetchCart().then((data) => {
+        dispatch(Cart(data.data.payload));
+      });
       setIsLoading(false);
     });
   }
 
-  useEffect(() => {}, [AllCart]);
-  // CartArray?.filter((element: any, i: number) => {
-  //   console.log('element', data[i]?._id === element?.productId)
-  //   if (data[i]?._id === element?.productId) {
-  //     ProductInCart.push(element)
-  //   }
-  //   else { }
-  // })
   const ProductInCart = data?.filter((el: any, i: number) => {
     console.log('iiii', el);
     console.log('cart', CartArray?.[i]);
@@ -67,7 +63,9 @@ export default function HeroCarousel({ data }: CarouselProps) {
   const RemoveFromCart = (id: number | string) => {
     removeCartProduct(id);
   };
+
   console.log('isProduct', ProductInCart);
+  console.log('ALLCART', AllCart);
   console.log('data', data);
   console.log('cart', CartArray);
 
