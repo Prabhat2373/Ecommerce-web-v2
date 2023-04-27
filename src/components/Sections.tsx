@@ -1,5 +1,5 @@
 import React from 'react';
-import Carousel from '../Pages/Home/HeroCarousel';
+import Carousel from './carousel/Carousel';
 
 interface SectionProps {
   title: string;
