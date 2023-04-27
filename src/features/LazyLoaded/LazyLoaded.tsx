@@ -21,3 +21,7 @@ export const products = AppLoader(
 export const profile = AppLoader(
   lazy(() => import('../../pages/Admin/Profile'))
 );
+
+export const newOrder = AppLoader(
+  lazy(() => import('../../pages/Orders/OrderIndex'))
+);

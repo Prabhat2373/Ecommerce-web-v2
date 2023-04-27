@@ -18,18 +18,22 @@ import { ProductType } from '../../interfaces/Payload';
 import { useDispatch, useSelector } from 'react-redux';
 import { GetRatings } from '../../Helper/Helper';
 import { Cart } from '../../features/Slices/CartSlice';
+import { RootState } from '../../store';
+import StarRating from '../../components/Stars/StarRating';
+import { useToast } from '../../features/Toast/ToastContext';
 interface CarouselProps {
   data?: any;
 }
 export default function HeroCarousel({ data }: CarouselProps) {
   const navigate = useNavigate();
-  const { data: CartArray } = useGetAllCartQuery('');
   const User = useSelector((state: any) => state.user.payload);
+  const CartItems = useSelector((state: RootState) => state.cart.items);
   const id = User?._id;
   const [removeCartProduct] = useRemoveCartItemMutation();
 
   const [AddToCart] = useAddToCartMutation();
   const { data: AllCart, refetch: FetchCart } = useGetAllCartQuery(User?._id);
+  const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [CartId, setCartId] = useState('');
   const dispatch = useDispatch();
@@ -47,27 +51,35 @@ export default function HeroCarousel({ data }: CarouselProps) {
         user: User?._id,
       },
       id,
-    }).then(() => {
-      FetchCart().then((data) => {
-        dispatch(Cart(data.data.payload));
+    })
+      .then((res: any) => {
+        FetchCart().then((data) => {
+          dispatch(Cart(data.data.payload));
+        });
+
+        if (res.error) {
+          toast.type = 'error';
+          toast.open(res.error?.data?.message);
+        } else {
+          toast.type = 'success';
+          toast.open(res?.data?.message);
+        }
+
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log('errorrr', err);
       });
-      setIsLoading(false);
-    });
   }
 
-  const ProductInCart = data?.filter((el: any, i: number) => {
-    console.log('iiii', el);
-    console.log('cart', CartArray?.[i]);
-    return el?._id === CartArray?.[i]?.productId;
-  });
   const RemoveFromCart = (id: number | string) => {
-    removeCartProduct(id);
+    removeCartProduct(id).then((res) => {
+      // toast.open(res);
+      console.log('resp', res);
+    });
   };
 
-  console.log('isProduct', ProductInCart);
-  console.log('ALLCART', AllCart);
-  console.log('data', data);
-  console.log('cart', CartArray);
+  console.log('cartItems', CartItems);
 
   return (
     <>
@@ -107,7 +119,7 @@ export default function HeroCarousel({ data }: CarouselProps) {
       >
         {data?.length > 0 ? (
           data?.map((element: ProductType, index: number) => {
-            console.log('newwww', element?._id, CartArray?.[index]?.productId);
+            console.log('newwww', element?._id, CartItems?.[index]?.product);
             return (
               <SwiperSlide>
                 <div
@@ -127,19 +139,7 @@ export default function HeroCarousel({ data }: CarouselProps) {
                   <div className="flex justify-between p-2">
                     <h3>{element?.name ?? 'PRODUCT '}</h3>
                     <p className="flex">
-                      {GetRatings(element?.ratings - 1)?.map(
-                        (rating: number) => {
-                          return (
-                            <StarIcon
-                              key={rating}
-                              className={
-                                'text-orange-500 h-5 w-5 flex-shrink-0'
-                              }
-                              aria-hidden="true"
-                            />
-                          );
-                        }
-                      )}
+                      <StarRating initialRating={element.ratings} readonly />
                     </p>
                   </div>
                   <div className="flex justify-between p-2">
@@ -150,7 +150,7 @@ export default function HeroCarousel({ data }: CarouselProps) {
                       onClick={(e) => {
                         setCartId(e?.currentTarget?.id);
 
-                        if (element?._id === CartArray?.[index]?.productId) {
+                        if (element?._id === CartItems?.[index]?.product) {
                           RemoveFromCart(element?._id);
                           console.log('hit remove api');
                         } else {
@@ -180,7 +180,7 @@ export default function HeroCarousel({ data }: CarouselProps) {
                         </div>
                       ) : (
                         <>
-                          {element?._id === CartArray?.[index]?.productId ? (
+                          {element?._id === CartItems?.[index]?.product ? (
                             <svg
                               className="h-5 w-5"
                               viewBox="0 0 24 24"
@@ -220,70 +220,7 @@ export default function HeroCarousel({ data }: CarouselProps) {
             );
           })
         ) : (
-          <div
-            className="swiper-child w-[400px] bg-[#D9D9D9] m-3 "
-            key={Math.random()}
-          >
-            <img
-              src={LoadingImage}
-              alt={'alter'}
-              className="cursor-pointer"
-              width={'400px'}
-              height={'440px'}
-            />
-            <div className="flex justify-between p-2">
-              <h3>{'PRODUCT '}</h3>
-              <p className="flex">
-                <StarIcon
-                  key={Math.random()}
-                  className={'text-orange-500 h-5 w-5 flex-shrink-0'}
-                  aria-hidden="true"
-                />
-                <StarIcon
-                  key={Math.random()}
-                  className={'text-orange-500 h-5 w-5 flex-shrink-0'}
-                  aria-hidden="true"
-                />
-                <StarIcon
-                  key={Math.random()}
-                  className={'text-orange-500 h-5 w-5 flex-shrink-0'}
-                  aria-hidden="true"
-                />
-                <StarIcon
-                  key={Math.random()}
-                  className={'text-orange-500 h-5 w-5 flex-shrink-0'}
-                  aria-hidden="true"
-                />
-                <StarIcon
-                  key={Math.random()}
-                  className={'text-gray-400 h-5 w-5 flex-shrink-0'}
-                  aria-hidden="true"
-                />
-              </p>
-            </div>
-            <div className="flex justify-between p-2">
-              <h2>₹ price</h2>
-              <p
-                className="cursor-pointer"
-                onClick={() => console.log('ADDING TO CART')}
-              >
-                <svg
-                  className="h-5 w-5"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.70711 15.2929C4.07714 15.9229 4.52331 17 5.41421 17H17M17 17C15.8954 17 15 17.8954 15 19C15 20.1046 15.8954 21 17 21C18.1046 21 19 20.1046 19 19C19 17.8954 18.1046 17 17 17ZM9 19C9 20.1046 8.10457 21 7 21C5.89543 21 5 20.1046 5 19C5 17.8954 5.89543 17 7 17C8.10457 17 9 17.8954 9 19Z"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              </p>
-            </div>
-          </div>
+          <div>{isLoading ? <h1>Loading...</h1> : <h1>No Results</h1>}</div>
         )}
       </Swiper>
       <div className="review-swiper-button-prev "></div>

@@ -6,19 +6,11 @@ export const routes = [
   {
     path: '/',
     exact: true,
-    id: 'dashboard',
-    iconClass: DashboardIcon,
-    displayName: 'Dashboard',
+    id: 'home',
+    displayName: 'home',
     element: <Lazyelement.Home />,
   },
-  {
-    path: '/login',
-    exact: true,
-    id: 'files',
-    iconClass: DashboardIcon,
-    displayName: 'files',
-    element: <Lazyelement.Login />,
-  },
+
   {
     path: '/view/:id',
     exact: true,
@@ -42,5 +34,13 @@ export const routes = [
     iconClass: DashboardIcon,
     displayName: 'files',
     element: <Lazyelement.profile />,
+  },
+  {
+    path: '/order/new',
+    exact: true,
+    id: 'files',
+    iconClass: DashboardIcon,
+    displayName: 'files',
+    element: <Lazyelement.newOrder />,
   },
 ];

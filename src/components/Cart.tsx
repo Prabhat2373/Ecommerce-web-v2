@@ -188,9 +188,9 @@ export default function CartComp({ isOpen, setOpen }: Props) {
                                   : 'cursor-pointer'
                               }`}
                               value="Checkout"
-                              defaultValue={'Checkout'}
+                              defaultValue={'Checkout'} 
                               disabled={!SubTotal || SubTotal === undefined}
-                              onClick={() => navigate('/order-form')}
+                              onClick={() => navigate('/order/new')}
                             />
                           </div>
                           <div className="mt-6 flex justify-center text-center text-sm text-gray-500">

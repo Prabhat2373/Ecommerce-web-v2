@@ -149,6 +149,7 @@ const ProductView = () => {
                 )}
                 {!isLoading ? 'Add to bag' : 'Adding To Bag'}
               </button>
+              <button className="px-4 py-2 bg-slate-600">Buy Now</button>
             </form>
           </div>
 
