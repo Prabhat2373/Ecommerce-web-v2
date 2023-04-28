@@ -3,25 +3,21 @@ import { useSelector } from 'react-redux';
 import Page from '../../components/Page';
 import { useGetMyOrdersQuery } from '../../features/services/RTK/Api';
 import Table from '../../components/Table/Table';
+import { useNavigate } from 'react-router-dom';
+
+interface OrderListType {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+  skill: string;
+}
 
 const MyOrders = () => {
   const { data: Orders } = useGetMyOrdersQuery('');
   const [OrdersArray, setOrdersArray] = useState([]);
-  const User = useSelector((state: any) => state?.user?.payload);
-  const Products = useSelector((state: any) => state?.products?.products);
-  const sellerId = User?._id;
-  const filteredProducts = Products?.filter(
-    (el: any) => el?.sellerId === sellerId
-  );
+  const nav = useNavigate();
   console.log('orders', Orders);
-
-  interface OrderListType {
-    id: number;
-    name: string;
-    email: string;
-    role: string;
-    skill: string;
-  }
 
   const OrderColumns = [
     {
@@ -78,46 +74,24 @@ const MyOrders = () => {
         content={
           <section>
             <div className="relative overflow-x-auto">
-              {/* <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                  <tr>
-                    <th scope="col" className="px-6 py-3">
-                      Product name
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Brand
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Category
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Price
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredProducts?.map((el: any) => {
-                    return (
-                      <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                        <th
-                          scope="row"
-                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                        >
-                          {el?.name}
-                        </th>
-                        <td className="px-6 py-4">{el?.brand}</td>
-                        <td className="px-6 py-4">{el?.category}</td>
-                        <td className="px-6 py-4">{el?.price}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table> */}
-
-              <Table
-                columns={OrderColumns}
-                data={!!OrdersArray ? OrdersArray : []}
-              />
+              {OrdersArray?.length ? (
+                <Table
+                  columns={OrderColumns}
+                  data={!!OrdersArray ? OrdersArray : []}
+                />
+              ) : (
+                <div className="flex flex-col gap-3 justify-center items-center">
+                  <div className="flex flex-col items-center gap-4">
+                    <h1 className="text-2xl font-semibold ">No Orders Yet</h1>
+                    <button
+                      onClick={() => nav('/products')}
+                      className="bg-blue-700 text-white px-4 py-2 text-lg font-semibold hover:bg-white border hover:border-blue-700 hover:text-blue-700"
+                    >
+                      Shop Now
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </section>
         }

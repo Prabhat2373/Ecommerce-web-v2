@@ -32,7 +32,7 @@ export default function DropDownMenu(user: UserType | any) {
 
         navigate('/login');
       })
-      .catch((err) => console.log(err?.message));
+      .catch((err: any) => console.log(err?.message));
   };
 
   return (
@@ -115,7 +115,7 @@ export default function DropDownMenu(user: UserType | any) {
             <Menu.Item>
               {({ active }) => (
                 <Link
-                  to={'/my-orders'}
+                  to={'/orders'}
                   className={classNames(
                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                     'block px-4 py-2 text-sm'

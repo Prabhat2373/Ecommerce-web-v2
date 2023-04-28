@@ -43,4 +43,20 @@ export const routes = [
     displayName: 'files',
     element: <Lazyelement.newOrder />,
   },
+  {
+    path: '/order-success',
+    exact: true,
+    id: 'files',
+    iconClass: DashboardIcon,
+    displayName: 'files',
+    element: <Lazyelement.orderSuccess />,
+  },
+  {
+    path: '/orders',
+    exact: true,
+    id: 'files',
+    iconClass: DashboardIcon,
+    displayName: 'files',
+    element: <Lazyelement.Orders />,
+  },
 ];

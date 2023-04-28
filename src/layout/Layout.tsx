@@ -13,7 +13,7 @@ const Layout = () => {
         <ScrollToTop />
         <div className="w-full">
           <Navbar />
-          <div className="mt-7">
+          <div className="mt-7 overflow-y-scroll">
             <Outlet />
           </div>
           <div>

@@ -25,3 +25,11 @@ export const profile = AppLoader(
 export const newOrder = AppLoader(
   lazy(() => import('../../pages/Orders/OrderIndex'))
 );
+
+export const orderSuccess = AppLoader(
+  lazy(() => import('../../pages/payment/PaymentSuccess'))
+);
+
+export const Orders = AppLoader(
+  lazy(() => import('../../pages/Orders/OrderList'))
+);

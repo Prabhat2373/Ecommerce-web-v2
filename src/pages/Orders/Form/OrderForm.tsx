@@ -69,9 +69,6 @@ const OrderForm = () => {
       .catch((err) => console.log(err?.message));
     setFormData(data);
   };
-  const onPayment = (data: any) => {
-    console.log('DATA', data, 'FORMDATA', formData);
-  };
 
   const [formStep, setFormStep] = useState(1);
 
