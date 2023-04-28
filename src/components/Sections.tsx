@@ -1,5 +1,6 @@
 import React from 'react';
 import Carousel from './carousel/Carousel';
+import HeroCarousel from '../pages/Home/HeroCarousel';
 
 interface SectionProps {
   title: string;
@@ -13,7 +14,7 @@ const Sections = ({ title, data, subhead }: SectionProps) => {
         <h1 className="font-bold text-4xl ">{title}</h1>
         <h4 className="subhead font-normal text-sm">{subhead}</h4>
         <div className="carousel-container">
-          <Carousel data={data} />
+          <HeroCarousel data={data} />
         </div>
       </div>
     </section>

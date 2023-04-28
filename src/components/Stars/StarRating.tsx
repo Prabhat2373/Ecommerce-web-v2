@@ -47,7 +47,7 @@ const StarRating = ({
     const isHovered = starIndex <= hoverRating;
     const isSelected = starIndex <= rating;
 
-    let icon = <FaStar />;
+    let icon = <FaStar className="text-orange-500" />;
     if (hasHalfStar && starIndex === Math.ceil(rating)) {
       icon = <FaStarHalfAlt />;
     }
@@ -60,7 +60,11 @@ const StarRating = ({
         onClick={() => handleClick(starIndex)}
         style={{ cursor: readonly ? 'default' : 'pointer' }}
       >
-        {isSelected || isHovered ? icon : <FaStar style={{ opacity: 0.4 }} />}
+        {isSelected || isHovered ? (
+          icon
+        ) : (
+          <FaStar className="text-orange-600" style={{ opacity: 0.4 }} />
+        )}
       </span>
     );
   });

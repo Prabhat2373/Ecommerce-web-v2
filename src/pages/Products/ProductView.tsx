@@ -103,6 +103,7 @@ const ProductView = () => {
                   type={'button'}
                   className="p-2 border w-7 border-indigo-600 text-indigo-600 text-lg cursor-pointer text-center hover:bg-indigo-800 hover:text-slate-200 "
                   value={'-'}
+                  disabled={quantity === 0}
                   onClick={() => setQuantity((prev) => prev - 1)}
                 />
                 <span className="border p-2 border-indigo-800 text-indigo-600 text-lg">
@@ -149,7 +150,9 @@ const ProductView = () => {
                 )}
                 {!isLoading ? 'Add to bag' : 'Adding To Bag'}
               </button>
-              <button className="px-4 py-2 bg-slate-600">Buy Now</button>
+              <button className="px-4 py-2 w-full rounded-md bg-white text-blue-500 border border-blue-500 hover:bg-blue-500 hover:text-white text-base font-medium mt-3 transition-all duration-200 ease-in">
+                Buy Now
+              </button>
             </form>
           </div>
 
