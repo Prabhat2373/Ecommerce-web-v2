@@ -140,25 +140,6 @@ const OrderForm = () => {
               </Elements>
             </div>
           ))}
-        {/* <div className="flex justify-between mt-6">
-          {formStep > 2 && (
-            <button
-              className="bg-gray-300 px-6 py-1.5 rounded-lg text-gray-700 hover:bg-gray-400"
-              onClick={handleBack}
-            >
-              Back
-            </button>
-          )}
-          {formStep < 3 && (
-            <button
-              className="bg-blue-500 px-6 py-1.5 rounded-lg text-white hover:bg-blue-600"
-              onClick={handleNext}
-              type="submit"
-            >
-              {formStep === 3 ? 'Proceed to pay' : 'Next'}
-            </button>
-          )}
-        </div> */}
       </div>
     </div>
   );

@@ -17,11 +17,13 @@ import StarRating from '../../components/Stars/StarRating';
 import { useForm } from 'react-hook-form';
 import { useToast } from '../../features/Toast/ToastContext';
 import userImage from '../../Assets/images/user-image.jpg';
+import { RootState } from '../../store';
+import { UserType } from '../../interfaces/Payload';
 
 const ProductView = () => {
   const query = useParams();
   const [PostReview] = useCreateReviewMutation();
-  const User = useSelector((state: any) => state.user.payload);
+  const User: any = useSelector((state: RootState) => state.user.payload);
   const id = User?._id;
   const productId = query?.id;
   const { data: ProductById } = useGetProductByIdQuery(productId ?? '');
@@ -49,9 +51,13 @@ const ProductView = () => {
         price: ProductById?.product?.price,
         image: ProductById?.product?.images?.[0]?.url,
         quantity: quantity,
+        user: id,
+        product: productId,
       },
       id,
-    }).then(() => {
+    }).then((res: any) => {
+      toast.type = 'success';
+      toast.open(res?.error?.data?.message);
       FetchCart();
       setIsLoading(false);
     });
