@@ -56,8 +56,7 @@ const ProductView = () => {
       },
       id,
     }).then((res: any) => {
-      toast.type = 'success';
-      toast.open(res?.error?.data?.message);
+      toast.open(res?.error?.data?.message, 'success');
       FetchCart();
       setIsLoading(false);
     });
@@ -248,11 +247,11 @@ const ProductView = () => {
 
                 PostReview(formData)
                   .then((res: any) => {
-                    toast.open(res?.data?.message);
+                    toast.open(res?.data?.message, 'success');
                     setIsOpen(false);
                   })
                   .catch((err) => {
-                    toast.open(err?.message);
+                    toast.open(err?.message, 'error');
                   });
               })}
             >

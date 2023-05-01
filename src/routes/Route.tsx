@@ -38,7 +38,9 @@ export const AllPages = () => {
     {
       element: (
         <>
-          <AppLayout />
+          <ProtectedRoute>
+            <AppLayout />
+          </ProtectedRoute>
         </>
       ),
       children: [...childRoute, ...parentRoute],

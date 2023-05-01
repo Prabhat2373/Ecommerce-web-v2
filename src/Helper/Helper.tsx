@@ -8,7 +8,3 @@ export const GetRatings = (num: number): number[] => {
   return res;
 };
 
-export const PushToast = (message: any) => {
-  const toast = useToast();
-  return toast.open(message);
-};

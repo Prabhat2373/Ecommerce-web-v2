@@ -5,6 +5,7 @@ const ProtectedRoute = ({ children }: any) => {
   const location = useLocation();
   function GetAuth() {
     let Token = window.localStorage.getItem('token');
+    console.log('token', Token);
     if (!Token) {
       return false;
     }

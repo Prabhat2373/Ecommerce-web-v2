@@ -58,11 +58,9 @@ export default function HeroCarousel({ data }: CarouselProps) {
         });
 
         if (res.error) {
-          toast.type = 'error';
-          toast.open(res.error?.data?.message);
+          toast.open(res.error?.data?.message, 'error');
         } else {
-          toast.type = 'success';
-          toast.open(res?.data?.message);
+          toast.open(res?.data?.message, 'success');
         }
 
         setIsLoading(false);
