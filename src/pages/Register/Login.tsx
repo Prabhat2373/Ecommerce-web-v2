@@ -21,18 +21,25 @@ export default function Login() {
     Login(data)
       .then((response: any) => {
         setIsLoading(false);
-        window.localStorage.setItem('token', response?.data?.token);
-        window.localStorage.setItem('user_email', response?.data?.user?.email);
-        console.log('User', response?.data?.user);
-        dispatch(User(response?.data?.user));
-        dispatch(isLoggedIn(true));
+        if (response?.data?.success) {
+          window.localStorage.setItem('token', response?.data?.token);
+          window.localStorage.setItem(
+            'user_email',
+            response?.data?.user?.email
+          );
+          dispatch(User(response?.data?.user));
+          dispatch(isLoggedIn(true));
+          toast.open('You have logged in successfully!', 'success');
 
-        toast.open('You have logged in successfully!');
-        navigate('/');
+          navigate('/');
+        } else {
+          toast.open(response?.error?.data?.message, 'error');
+        }
+        console.log('reeessspon', response);
+        console.log('User', response?.data?.user);
       })
       .catch((err) => {
-        console.log(err?.message);
-        alert('Something went wrong');
+        toast.open(err?.error?.data?.message, 'error');
       });
   };
   return (

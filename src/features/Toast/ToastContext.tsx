@@ -4,8 +4,7 @@ import Toast from '../../components/Toast';
 import { createPortal } from 'react-dom';
 
 interface ToastContextProps {
-  open: (content: ReactNode) => void;
-  type?: 'success' | 'error' | 'warning';
+  open: (content: ReactNode, type: 'success' | 'error' | 'warning') => void;
 }
 
 export const ToastContext = createContext<ToastContextProps>(
@@ -14,6 +13,7 @@ export const ToastContext = createContext<ToastContextProps>(
 interface ToastContent {
   id: string;
   content: ReactNode;
+  type: 'success' | 'error' | 'warning';
 }
 
 function generateUEID(): string {
@@ -29,10 +29,10 @@ export const ToastContextProvider: FC<{
   children: ReactNode;
 }> = ({ children }) => {
   const [toasts, setToasts] = useState<ToastContent[]>([]);
-  const open = (content: ReactNode) =>
+  const open = (content: ReactNode, type: 'success' | 'error' | 'warning') =>
     setToasts((currentToasts) => [
       ...currentToasts,
-      { id: generateUEID(), content },
+      { id: generateUEID(), content, type },
     ]);
   const close = (id: string) =>
     setToasts((currentToasts) =>
@@ -45,8 +45,12 @@ export const ToastContextProvider: FC<{
       {children}
       {createPortal(
         <div className="toasts-wrapper">
-          {toasts.map((toast: { id: string; content: any }) => (
-            <Toast key={toast.id} close={() => close(toast.id)}>
+          {toasts.map((toast: { id: string; content: any; type: any }) => (
+            <Toast
+              key={toast.id}
+              close={() => close(toast.id)}
+              type={toast.type}
+            >
               {toast.content}
             </Toast>
           ))}
