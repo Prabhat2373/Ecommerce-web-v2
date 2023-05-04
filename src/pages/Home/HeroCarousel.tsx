@@ -71,9 +71,10 @@ export default function HeroCarousel({ data }: CarouselProps) {
   }
 
   const RemoveFromCart = (id: number | string) => {
-    removeCartProduct(id).then((res) => {
-      // toast.open(res);
-      console.log('resp', res);
+    removeCartProduct(id).then((res: any) => {
+      toast.open(res?.data?.message, 'success');
+      FetchCart();
+      if (res.error) toast.open(res?.error?.data?.message, 'error');
     });
   };
 
