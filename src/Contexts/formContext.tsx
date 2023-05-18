@@ -1,5 +1,4 @@
-// App.js
-import { ReactNode, createContext, useState, useContext } from 'react';
+import { ReactNode, createContext, useState, useContext } from "react";
 
 export interface FormDataType {
   first_name: string;
@@ -30,6 +29,8 @@ interface FormContextProps {
   setFormData: React.Dispatch<React.SetStateAction<FormDataType>>;
   step: number;
   setStep: React.Dispatch<React.SetStateAction<number>>;
+  setOrderItems: React.Dispatch<React.SetStateAction<any>>;
+  orderItems: any;
 }
 export const FormContext = createContext<FormContextProps>(
   {} as FormContextProps
@@ -38,26 +39,30 @@ export const FormContext = createContext<FormContextProps>(
 export const FormContextProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
+  const [orderItems, setOrderItems] = useState<any>({});
   const [formData, setFormData] = useState<FormDataType>({
-    first_name: '',
-    last_name: '',
-    email: '',
-    address1: '',
-    address2: '',
-    city: '',
-    state: '',
-    country: '',
-    zip: '',
-    phone: '',
+    first_name: "",
+    last_name: "",
+    email: "",
+    address1: "",
+    address2: "",
+    city: "",
+    state: "",
+    country: "",
+    zip: "",
+    phone: "",
     totalAmount: 0,
   });
-
   const [step, setStep] = useState(0);
-  return (
-    <FormContext.Provider value={{ formData, setFormData, setStep, step }}>
-      {children}
-    </FormContext.Provider>
-  );
+  const value: FormContextProps = {
+    formData,
+    setFormData,
+    setStep,
+    step,
+    orderItems,
+    setOrderItems,
+  };
+  return <FormContext.Provider value={value}>{children}</FormContext.Provider>;
 };
 
 export const useOrderFormContext = () => {

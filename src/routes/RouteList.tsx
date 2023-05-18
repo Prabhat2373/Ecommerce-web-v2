@@ -1,62 +1,70 @@
-import * as Lazyelement from '../../src/features/LazyLoaded/LazyLoaded';
+import * as Lazyelement from "../../src/features/LazyLoaded/LazyLoaded";
 
-import DashboardIcon from '../Assets/icons/EditIcon';
+import DashboardIcon from "../Assets/icons/EditIcon";
 
 export const routes = [
   {
-    path: '/',
+    path: "/",
     exact: true,
-    id: 'home',
-    displayName: 'home',
+    id: "home",
+    displayName: "home",
     element: <Lazyelement.Home />,
   },
 
   {
-    path: '/view/:id',
+    path: "/view/:id",
     exact: true,
-    id: 'files',
+    id: "files",
     iconClass: DashboardIcon,
-    displayName: 'files',
+    displayName: "files",
     element: <Lazyelement.productView />,
   },
   {
-    path: '/products',
+    path: "/products",
     exact: true,
-    id: 'files',
+    id: "files",
     iconClass: DashboardIcon,
-    displayName: 'files',
+    displayName: "files",
     element: <Lazyelement.products />,
   },
   {
-    path: '/profile',
+    path: "/product/create",
     exact: true,
-    id: 'files',
+    id: "files",
     iconClass: DashboardIcon,
-    displayName: 'files',
+    displayName: "files",
+    element: <Lazyelement.ProductCreate />,
+  },
+  {
+    path: "/profile",
+    exact: true,
+    id: "files",
+    iconClass: DashboardIcon,
+    displayName: "files",
     element: <Lazyelement.profile />,
   },
   {
-    path: '/order/new',
+    path: "/order/new",
     exact: true,
-    id: 'files',
+    id: "files",
     iconClass: DashboardIcon,
-    displayName: 'files',
+    displayName: "files",
     element: <Lazyelement.newOrder />,
   },
   {
-    path: '/order-success',
+    path: "/order-success",
     exact: true,
-    id: 'files',
+    id: "files",
     iconClass: DashboardIcon,
-    displayName: 'files',
+    displayName: "files",
     element: <Lazyelement.orderSuccess />,
   },
   {
-    path: '/orders',
+    path: "/orders",
     exact: true,
-    id: 'files',
+    id: "files",
     iconClass: DashboardIcon,
-    displayName: 'files',
+    displayName: "files",
     element: <Lazyelement.Orders />,
   },
 ];

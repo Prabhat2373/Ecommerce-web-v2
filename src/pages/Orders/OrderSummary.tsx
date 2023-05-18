@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { Product } from '../../Types/Products';
-import { useGetAllCartQuery } from '../../features/services/RTK/Api';
-import { useSelector } from 'react-redux';
-import { UserType } from '../../features/Slices/AppSlice';
-import { useOrderFormContext } from '../../Contexts/formContext';
+import React, { useEffect, useState } from "react";
+import { Product } from "../../Types/Products";
+import { useGetAllCartQuery } from "../../features/services/RTK/Api";
+import { useSelector } from "react-redux";
+import { UserType } from "../../features/Slices/AppSlice";
+import { useOrderFormContext } from "../../Contexts/formContext";
+import { useLocation, useParams } from "react-router-dom";
 
 interface Cart extends Product {
   _id: string;
@@ -27,6 +28,12 @@ const OrderSummary = ({
 }) => {
   const User: UserType = useSelector((state: any) => state.user.payload);
   const [CartData, setCartData] = useState<Cart[]>([]);
+  const { search, state } = useLocation();
+  const query = search.replace("?", "").split(/[&=]/).pop();
+  console.log("search", search);
+  console.log("query", query);
+  console.log("state", state);
+
   const { setFormData, formData } = useOrderFormContext();
   const { data: CartItems, refetch: FetchMore } = useGetAllCartQuery(User?._id);
   useEffect(() => {
@@ -37,9 +44,12 @@ const OrderSummary = ({
     return Number(price?.price) + item;
   }, 0);
   useEffect(() => {
-    setFormData({ ...formData, totalAmount: SubTotal });
-  }, [SubTotal]);
-  console.log('user', User);
+    setFormData({
+      ...formData,
+      totalAmount: query === "true" ? state.price : SubTotal,
+    });
+  }, [SubTotal, state]);
+  console.log("url", state?.images[0]?.url);
   return (
     <div className="py-14 px-4 md:px-6 2xl:px-20 2xl:container 2xl:mx-auto">
       <div className="flex justify-start item-start space-y-2 flex-col ">
@@ -54,74 +64,139 @@ const OrderSummary = ({
         <div className="flex flex-col justify-start items-start w-full space-y-4 md:space-y-6 xl:space-y-8">
           <div className="flex flex-col justify-start items-start bg-gray-50 px-4 py-4 md:py-6 md:p-6 xl:p-8 w-full">
             <p className="text-lg md:text-xl font-semibold leading-6 xl:leading-5 text-gray-800">
-              Customer’s Cart
+              {query === "true" ? "Product Details" : "Customer’s Cart"}
             </p>
-            {CartData?.length ? (
-              CartData?.map((element) => {
-                return (
-                  <>
-                    <div className="mt-4 md:mt-6 flex  flex-col md:flex-row justify-start items-start md:items-center md:space-x-6 xl:space-x-8 w-full ">
-                      <div className="pb-4 md:pb-8 w-full md:w-40">
-                        <img
-                          className="w-full hidden md:block"
-                          src={element?.image ?? ''}
-                          alt="dress"
-                        />
-                        <img
-                          className="w-full md:hidden"
-                          src={element?.image ?? ''}
-                          alt="dress"
-                        />
+            <>
+              {query === "true" ? (
+                <>
+                  <div className="mt-4 md:mt-6 flex  flex-col md:flex-row justify-start items-start md:items-center md:space-x-6 xl:space-x-8 w-full ">
+                    <div className="pb-4 md:pb-8 w-full md:w-40">
+                      <img
+                        className="w-full hidden md:block"
+                        src={state?.images[0]?.url ?? ""}
+                        alt="dress"
+                      />
+                      <img
+                        className="w-full md:hidden"
+                        src={state?.images[0]?.url ?? ""}
+                        alt="dress"
+                      />
+                    </div>
+                    <div className="border-b border-gray-200 md:flex-row flex-col flex justify-between items-start w-full  pb-8 space-y-4 md:space-y-0">
+                      <div className="w-full flex flex-col justify-start items-start space-y-8">
+                        <h3 className="text-xl xl:text-2xl font-semibold leading-6 text-gray-800">
+                          {state?.name}
+                        </h3>
+                        <div className="flex justify-start items-start flex-col space-y-2">
+                          <p className="text-sm leading-none text-gray-800">
+                            <span className="text-gray-300">Category: </span>{" "}
+                            {state?.category ?? "N.A."}
+                          </p>
+                          <p className="text-sm leading-none text-gray-800">
+                            <span className="text-gray-300">Brand: </span>{" "}
+                            {state?.brand ?? "N.A."}
+                          </p>
+                          <p className="text-sm leading-none text-gray-800">
+                            <span className="text-gray-300">Rating: </span>{" "}
+                            {state?.ratings ?? "N.A."}
+                          </p>
+                        </div>
                       </div>
-                      <div className="border-b border-gray-200 md:flex-row flex-col flex justify-between items-start w-full  pb-8 space-y-4 md:space-y-0">
-                        <div className="w-full flex flex-col justify-start items-start space-y-8">
-                          <h3 className="text-xl xl:text-2xl font-semibold leading-6 text-gray-800">
-                            {element?.name}
-                          </h3>
-                          <div className="flex justify-start items-start flex-col space-y-2">
-                            <p className="text-sm leading-none text-gray-800">
-                              <span className="text-gray-300">Category: </span>{' '}
-                              {element?.category ?? 'N.A.'}
-                            </p>
-                            <p className="text-sm leading-none text-gray-800">
-                              <span className="text-gray-300">Brand: </span>{' '}
-                              {element?.brand ?? 'N.A.'}
-                            </p>
-                            <p className="text-sm leading-none text-gray-800">
-                              <span className="text-gray-300">Rating: </span>{' '}
-                              {element?.ratings ?? 'N.A.'}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex justify-between space-x-8 items-start w-full">
-                          <p className="text-base xl:text-lg leading-6">
-                            ${element?.price}{' '}
-                            <span className="text-red-300 line-through">
-                              {' '}
-                              ${Number(element?.price) + 200}
-                            </span>
-                          </p>
-                          <p className="text-base xl:text-lg leading-6 text-gray-800">
-                            {element?.quantity}
-                          </p>
-                          <p className="text-base xl:text-lg font-semibold leading-6 text-gray-800">
-                            ${element?.price ?? 'N.A.'}
-                          </p>
-                        </div>
+                      <div className="flex justify-between space-x-8 items-start w-full">
+                        <p className="text-base xl:text-lg leading-6">
+                          ${state?.price}{" "}
+                          <span className="text-red-300 line-through">
+                            {" "}
+                            ${Number(state?.price) + 200}
+                          </span>
+                        </p>
+                        <p className="text-base xl:text-lg leading-6 text-gray-800">
+                          1
+                        </p>
+                        <p className="text-base xl:text-lg font-semibold leading-6 text-gray-800">
+                          ${state?.price ?? "N.A."}
+                        </p>
                       </div>
                     </div>
-                  </>
-                );
-              })
-            ) : (
-              <>
-                <div className="flex justify-center px-4 py-6 w-full ">
-                  <h1 className="text-slate-800 font-semibold text-lg">
-                    No Items In Cart
-                  </h1>
-                </div>
-              </>
-            )}
+                  </div>
+                </>
+              ) : (
+                <>
+                  {CartData?.length ? (
+                    CartData?.map((element) => {
+                      return (
+                        <>
+                          <div className="mt-4 md:mt-6 flex  flex-col md:flex-row justify-start items-start md:items-center md:space-x-6 xl:space-x-8 w-full ">
+                            <div className="pb-4 md:pb-8 w-full md:w-40">
+                              <img
+                                className="w-full hidden md:block"
+                                src={element?.image ?? ""}
+                                alt="dress"
+                              />
+                              <img
+                                className="w-full md:hidden"
+                                src={element?.image ?? ""}
+                                alt="dress"
+                              />
+                            </div>
+                            <div className="border-b border-gray-200 md:flex-row flex-col flex justify-between items-start w-full  pb-8 space-y-4 md:space-y-0">
+                              <div className="w-full flex flex-col justify-start items-start space-y-8">
+                                <h3 className="text-xl xl:text-2xl font-semibold leading-6 text-gray-800">
+                                  {element?.name}
+                                </h3>
+                                <div className="flex justify-start items-start flex-col space-y-2">
+                                  <p className="text-sm leading-none text-gray-800">
+                                    <span className="text-gray-300">
+                                      Category:{" "}
+                                    </span>{" "}
+                                    {element?.category ?? "N.A."}
+                                  </p>
+                                  <p className="text-sm leading-none text-gray-800">
+                                    <span className="text-gray-300">
+                                      Brand:{" "}
+                                    </span>{" "}
+                                    {element?.brand ?? "N.A."}
+                                  </p>
+                                  <p className="text-sm leading-none text-gray-800">
+                                    <span className="text-gray-300">
+                                      Rating:{" "}
+                                    </span>{" "}
+                                    {element?.ratings ?? "N.A."}
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="flex justify-between space-x-8 items-start w-full">
+                                <p className="text-base xl:text-lg leading-6">
+                                  ${element?.price}{" "}
+                                  <span className="text-red-300 line-through">
+                                    {" "}
+                                    ${Number(element?.price) + 200}
+                                  </span>
+                                </p>
+                                <p className="text-base xl:text-lg leading-6 text-gray-800">
+                                  {element?.quantity}
+                                </p>
+                                <p className="text-base xl:text-lg font-semibold leading-6 text-gray-800">
+                                  ${element?.price ?? "N.A."}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      );
+                    })
+                  ) : (
+                    <>
+                      <div className="flex justify-center px-4 py-6 w-full ">
+                        <h1 className="text-slate-800 font-semibold text-lg">
+                          No Items In Cart
+                        </h1>
+                      </div>
+                    </>
+                  )}
+                </>
+              )}
+            </>
           </div>
           <div className="flex justify-center md:flex-row flex-col items-stretch w-full space-y-4 md:space-y-0 md:space-x-6 xl:space-x-8">
             <div className="flex flex-col px-4 py-6 md:p-6 xl:p-8 w-full bg-gray-50 space-y-6   ">
@@ -132,12 +207,12 @@ const OrderSummary = ({
                 <div className="flex justify-between  w-full">
                   <p className="text-base leading-4 text-gray-800">Subtotal</p>
                   <p className="text-base leading-4 text-gray-600">
-                    ${SubTotal}
+                    ${query === "true" ? state?.price : SubTotal}
                   </p>
                 </div>
                 <div className="flex justify-between items-center w-full">
                   <p className="text-base leading-4 text-gray-800">
-                    Discount{' '}
+                    Discount{" "}
                     <span className="bg-gray-200 p-1 text-xs font-medium leading-3  text-gray-800">
                       STUDENT
                     </span>
@@ -156,7 +231,7 @@ const OrderSummary = ({
                   Total
                 </p>
                 <p className="text-base font-semibold leading-4 text-gray-600">
-                  ${SubTotal + 50}
+                  ${query === "true" ? state.price + 50 : SubTotal + 50}
                 </p>
               </div>
             </div>
@@ -202,10 +277,10 @@ const OrderSummary = ({
           <div className="flex  flex-col md:flex-row xl:flex-col justify-start items-stretch h-full w-full md:space-x-6 lg:space-x-8 xl:space-x-0 ">
             <div className="flex flex-col justify-start items-start flex-shrink-0">
               <div className="flex justify-center  w-full  md:justify-start items-center space-x-4 py-8 border-b border-gray-200">
-                <img src={User?.avatar?.url ?? ''} alt="avatar" />
+                <img src={User?.avatar?.url ?? ""} alt="avatar" />
                 <div className=" flex justify-start items-start flex-col space-y-2">
                   <p className="text-base font-semibold leading-4 text-left text-gray-800">
-                    {User?.name ?? 'N.A.'}
+                    {User?.name ?? "N.A."}
                   </p>
                   <p className="text-sm leading-5 text-gray-600">
                     10 Previous Orders
@@ -235,7 +310,7 @@ const OrderSummary = ({
                   />
                 </svg>
                 <p className="cursor-pointer text-sm leading-5 text-gray-800">
-                  {User?.email ?? 'N.A.'}
+                  {User?.email ?? "N.A."}
                 </p>
               </div>
             </div>

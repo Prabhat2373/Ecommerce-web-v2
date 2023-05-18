@@ -1,12 +1,13 @@
-import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import React, { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import {
-  FormContext,
   FormDataType,
   useOrderFormContext,
-} from '../../../Contexts/formContext';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../store';
+} from "../../../Contexts/formContext";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store";
+import { useAddBillingDetailsMutation } from "../../../features/services/RTK/Api";
+import { useToast } from "../../../features/Toast/ToastContext";
 const ShippingDetails = ({
   formStep,
   nextFormStep,
@@ -16,10 +17,12 @@ const ShippingDetails = ({
 }) => {
   const { formData, setFormData } = useOrderFormContext();
   const user: any = useSelector((state: RootState) => state.user.payload);
-  console.log('user', user);
+  console.log("user", user);
+  const toast = useToast();
+  const [AddBilling] = useAddBillingDetailsMutation();
   const initialValues: FormDataType = {
     first_name: user?.name,
-    last_name: user?.last_name ?? '',
+    last_name: user?.last_name ?? "",
     email: user?.email,
     address1: user?.billing_info?.billing_address_line1,
     address2: user?.billing_info?.billing_address_line2,
@@ -40,7 +43,24 @@ const ShippingDetails = ({
   });
   const onSubmit = (data: any) => {
     setFormData(data);
-    nextFormStep();
+    console.log("dataaaaa", data["first_name"]);
+    const formData = new FormData();
+    Object.keys(data).forEach((el) => {
+      formData.append(el, data[el]);
+      console.log("elll", el);
+    });
+
+    AddBilling({
+      payload: formData,
+      id: user._id,
+    }).then((res: any) => {
+      console.log("RESPONSE", res);
+      if (res.data?.message) {
+        nextFormStep();
+      } else {
+        toast.open(res.data?.message, "error");
+      }
+    });
   };
   return (
     <>
@@ -50,7 +70,7 @@ const ShippingDetails = ({
             <span className="text-gray-700">Your name</span>
             <input
               type="text"
-              {...register('first_name')}
+              {...register("first_name")}
               className="block w-full
       mt-1
       border-gray-300
@@ -68,7 +88,7 @@ const ShippingDetails = ({
             <span className="text-gray-700">Your Email</span>
             <input
               type="email"
-              {...register('email')}
+              {...register("email")}
               className="block w-full
       mt-1
       border-gray-300
@@ -85,7 +105,7 @@ const ShippingDetails = ({
           <label className="block mb-6">
             <span className="text-gray-700">Address line 1</span>
             <input
-              {...register('address1')}
+              {...register("address1")}
               type="text"
               className="
       block
@@ -105,7 +125,7 @@ const ShippingDetails = ({
           <label className="block mb-6">
             <span className="text-gray-700">Address line 2</span>
             <input
-              {...register('address2')}
+              {...register("address2")}
               type="text"
               className="
       block
@@ -125,7 +145,7 @@ const ShippingDetails = ({
           <label className="block mb-6">
             <span className="text-gray-700">City</span>
             <input
-              {...register('city')}
+              {...register("city")}
               type="text"
               className="
       block
@@ -145,7 +165,7 @@ const ShippingDetails = ({
           <label className="block mb-6">
             <span className="text-gray-700">State/Province</span>
             <input
-              {...register('state')}
+              {...register("state")}
               type="text"
               className="
       block
@@ -165,7 +185,7 @@ const ShippingDetails = ({
           <label className="block mb-6">
             <span className="text-gray-700">Zip/Postal code</span>
             <input
-              {...register('zip')}
+              {...register("zip")}
               type="text"
               className="
       block
@@ -185,7 +205,7 @@ const ShippingDetails = ({
           <label className="block mb-6">
             <span className="text-gray-700">Country</span>
             <input
-              {...register('country')}
+              {...register("country")}
               type="text"
               className="
       block
@@ -205,7 +225,7 @@ const ShippingDetails = ({
           <label className="block mb-6">
             <span className="text-gray-700">Telephone</span>
             <input
-              {...register('phone')}
+              {...register("phone")}
               type="text"
               className="
       block

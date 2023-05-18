@@ -1,24 +1,24 @@
-import React from 'react';
-import { useState } from 'react';
-import { StarIcon } from '@heroicons/react/20/solid';
-import { useNavigate, useParams } from 'react-router-dom';
+import React from "react";
+import { useState } from "react";
+import { StarIcon } from "@heroicons/react/20/solid";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   useAddToCartMutation,
   useCreateReviewMutation,
   useGetAllCartQuery,
   useGetProductByIdQuery,
   useGetProductReviewsQuery,
-} from '../../features/services/RTK/Api';
-import { Product } from '../../Types/Products';
-import { useSelector } from 'react-redux';
-import Carousel from '../../components/carousel/Carousel';
-import Modal from '../../components/Modal/Modal';
-import StarRating from '../../components/Stars/StarRating';
-import { useForm } from 'react-hook-form';
-import { useToast } from '../../features/Toast/ToastContext';
-import userImage from '../../Assets/images/user-image.jpg';
-import { RootState } from '../../store';
-import { UserType } from '../../interfaces/Payload';
+} from "../../features/services/RTK/Api";
+import { Product } from "../../Types/Products";
+import { useSelector } from "react-redux";
+import Carousel from "../../components/carousel/Carousel";
+import Modal from "../../components/Modal/Modal";
+import StarRating from "../../components/Stars/StarRating";
+import { useForm } from "react-hook-form";
+import { useToast } from "../../features/Toast/ToastContext";
+import userImage from "../../Assets/images/user-image.jpg";
+import { RootState } from "../../store";
+import { UserType } from "../../interfaces/Payload";
 
 const ProductView = () => {
   const query = useParams();
@@ -26,7 +26,7 @@ const ProductView = () => {
   const User: any = useSelector((state: RootState) => state.user.payload);
   const id = User?._id;
   const productId = query?.id;
-  const { data: ProductById } = useGetProductByIdQuery(productId ?? '');
+  const { data: ProductById } = useGetProductByIdQuery(productId ?? "");
   const { data: GetReviews } = useGetProductReviewsQuery(productId);
   const [Product, setProduct] = useState<Product>();
   const [productReviews, setProductReviews] = useState<any>([]);
@@ -42,6 +42,13 @@ const ProductView = () => {
 
   const { register, handleSubmit } = useForm();
 
+  const handleBuyNow = async () => {
+
+    nav(`/order/new?id=${Product?._id}&single=true`, {
+      state: Product,
+    })
+  };
+
   function AddCart(quantity: any) {
     setIsLoading(true);
     AddToCart({
@@ -56,7 +63,7 @@ const ProductView = () => {
       },
       id,
     }).then((res: any) => {
-      toast.open(res?.error?.data?.message, 'success');
+      toast.open(res?.error?.data?.message, "success");
       FetchCart();
       setIsLoading(false);
     });
@@ -68,6 +75,8 @@ const ProductView = () => {
   React.useEffect(() => {
     setProductReviews(GetReviews?.reviews);
   }, [GetReviews]);
+
+  console.log("product", Product);
 
   return (
     <div className="bg-white">
@@ -105,9 +114,9 @@ const ProductView = () => {
 
             <div className="custom-number-input h-10 w-32 flex items-center mt-10">
               <input
-                type={'button'}
+                type={"button"}
                 className="p-2 border w-7 border-indigo-600 text-indigo-600 text-lg cursor-pointer text-center hover:bg-indigo-800 hover:text-slate-200 "
-                value={'-'}
+                value={"-"}
                 disabled={quantity === 0}
                 onClick={() => setQuantity((prev) => prev - 1)}
               />
@@ -115,9 +124,9 @@ const ProductView = () => {
                 {quantity}
               </span>
               <input
-                type={'button'}
+                type={"button"}
                 className="p-2 border w-7 border-indigo-600 text-indigo-600 text-lg cursor-pointer text-center hover:bg-indigo-800 hover:text-slate-200 "
-                value={'+'}
+                value={"+"}
                 onClick={() => setQuantity((prev) => prev + 1)}
               />
             </div>
@@ -153,15 +162,11 @@ const ProductView = () => {
                   <span className="sr-only">Loading...</span>
                 </div>
               )}
-              {!isLoading ? 'Add to bag' : 'Adding To Bag'}
+              {!isLoading ? "Add to bag" : "Adding To Bag"}
             </button>
             <button
               className="px-4 py-2 w-full rounded-md bg-white text-blue-500 border border-blue-500 hover:bg-blue-500 hover:text-white text-base font-medium mt-3 transition-all duration-200 ease-in"
-              onClick={() =>
-                nav(`/order/new?id=${Product?._id}&single=true`, {
-                  state: Product,
-                })
-              }
+              onClick={() => handleBuyNow()}
             >
               Buy Now
             </button>
@@ -225,7 +230,7 @@ const ProductView = () => {
                     </div>
                     <div>
                       <p className="font-serif text-lg ">
-                        {item.comment ?? 'N.A'}
+                        {item.comment ?? "N.A"}
                       </p>
                     </div>
                   </div>
@@ -241,17 +246,17 @@ const ProductView = () => {
             <form
               onSubmit={handleSubmit((data) => {
                 const formData = new FormData();
-                formData.append('rating', formRating.toString());
-                formData.append('comment', data.comment);
-                formData.append('productId', productId ? productId : '');
+                formData.append("rating", formRating.toString());
+                formData.append("comment", data.comment);
+                formData.append("productId", productId ? productId : "");
 
                 PostReview(formData)
                   .then((res: any) => {
-                    toast.open(res?.data?.message, 'success');
+                    toast.open(res?.data?.message, "success");
                     setIsOpen(false);
                   })
                   .catch((err) => {
-                    toast.open(err?.message, 'error');
+                    toast.open(err?.message, "error");
                   });
               })}
             >
@@ -273,7 +278,7 @@ const ProductView = () => {
                     Your message
                   </label>
                   <textarea
-                    {...register('comment')}
+                    {...register("comment")}
                     rows={4}
                     className="block p-2.5 w-full text-sm  bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500   "
                     placeholder="Write your Review here..."

@@ -1,18 +1,18 @@
-import { Fragment, useState, useEffect } from 'react';
-import { Menu, Transition } from '@headlessui/react';
-import { Link } from 'react-router-dom';
-import { useLogoutMutation } from '../features/services/RTK/Api';
-import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import AuthWrapper from '../utils/AuthWrapper';
-import AdminAuth from '../features/auth/AdminAuth';
-import { LogoutUser, User } from '../features/Slices/AppSlice';
-import { UserType } from '../features/Slices/AppSlice';
+import { Fragment, useState, useEffect } from "react";
+import { Menu, Transition } from "@headlessui/react";
+import { Link } from "react-router-dom";
+import { useLogoutMutation } from "../features/services/RTK/Api";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import AuthWrapper from "../utils/AuthWrapper";
+import AdminAuth from "../features/auth/AdminAuth";
+import { LogoutUser, User } from "../features/Slices/AppSlice";
+import { UserType } from "../features/Slices/AppSlice";
 
-import dummyImg from '../Assets/images/user-image.jpg';
+import dummyImg from "../Assets/images/user-image.jpg";
 
 function classNames(...classes: any) {
-  return classes.filter(Boolean).join(' ');
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function DropDownMenu(user: UserType | any) {
@@ -20,17 +20,17 @@ export default function DropDownMenu(user: UserType | any) {
   const [logoutuser] = useLogoutMutation();
   const navigate = useNavigate();
   const { LoggedIn } = useSelector((state: any) => state.user.user);
-  console.log('IS LOGGED', LoggedIn);
-  console.log('user', user);
+  console.log("IS LOGGED", LoggedIn);
+  console.log("user", user);
 
   const Logout = () => {
-    logoutuser('')
+    logoutuser("")
       .then(() => {
         dispatch(LogoutUser());
         window.localStorage.clear();
         window.location.reload();
 
-        navigate('/login');
+        navigate("/login");
       })
       .catch((err: any) => console.log(err?.message));
   };
@@ -67,11 +67,11 @@ export default function DropDownMenu(user: UserType | any) {
                 {({ active }) => (
                   <span
                     className={classNames(
-                      active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                      'block px-4 py-2 text-sm'
+                      active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+                      "block px-4 py-2 text-sm"
                     )}
                   >
-                    Hello! {user?.user?.name ?? 'N.A.'}
+                    Hello! {user?.user?.name ?? "N.A."}
                   </span>
                 )}
               </Menu.Item>
@@ -83,8 +83,8 @@ export default function DropDownMenu(user: UserType | any) {
                     <Link
                       to="/profile"
                       className={classNames(
-                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                        'block px-4 py-2 text-sm'
+                        active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+                        "block px-4 py-2 text-sm"
                       )}
                     >
                       Account settings
@@ -93,32 +93,32 @@ export default function DropDownMenu(user: UserType | any) {
                 </Menu.Item>
               </AuthWrapper>
             ) : (
-              ''
+              ""
             )}
             <Menu.Item>
               {({ active }) => (
                 <Link
                   to={`${
-                    user?.user?.role === 'admin' ? 'upload-product' : 'register'
+                    user?.user?.role === "admin" ? "product/create" : "register"
                   }`}
                   className={classNames(
-                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                    'block px-4 py-2 text-sm'
+                    active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+                    "block px-4 py-2 text-sm"
                   )}
                 >
-                  {user?.user?.role === 'admin'
-                    ? 'Sell Product'
-                    : 'Become a Seller'}
+                  {user?.user?.role === "admin"
+                    ? "Sell Product"
+                    : "Become a Seller"}
                 </Link>
               )}
             </Menu.Item>
             <Menu.Item>
               {({ active }) => (
                 <Link
-                  to={'/orders'}
+                  to={"/orders"}
                   className={classNames(
-                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                    'block px-4 py-2 text-sm'
+                    active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+                    "block px-4 py-2 text-sm"
                   )}
                 >
                   Your Orders
@@ -130,10 +130,10 @@ export default function DropDownMenu(user: UserType | any) {
               <Menu.Item>
                 {({ active }) => (
                   <Link
-                    to={'/your-products'}
+                    to={"/your-products"}
                     className={classNames(
-                      active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                      'block px-4 py-2 text-sm'
+                      active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+                      "block px-4 py-2 text-sm"
                     )}
                   >
                     Your Products
@@ -148,12 +148,12 @@ export default function DropDownMenu(user: UserType | any) {
                   <Link
                     type="submit"
                     className={classNames(
-                      active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                      'block w-full px-4 py-2 text-left text-sm'
+                      active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+                      "block w-full px-4 py-2 text-left text-sm"
                     )}
-                    to={`${LoggedIn ? 'register' : 'login'}`}
+                    to={`${LoggedIn ? "register" : "login"}`}
                     onClick={() => {
-                      LoggedIn ? Logout() : navigate('/login');
+                      LoggedIn ? Logout() : navigate("/login");
                     }}
                   >
                     {LoggedIn ? (

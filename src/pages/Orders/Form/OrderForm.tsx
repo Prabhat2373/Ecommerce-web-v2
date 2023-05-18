@@ -1,21 +1,22 @@
-import { useEffect, useState } from 'react';
-import OrderSummary from '../OrderSummary';
-import BillingInfoForm from './BillingInfoForm';
-import ShippingDetails from './ShippingDetails';
+import { useEffect, useState } from "react";
+import OrderSummary from "../OrderSummary";
+import BillingInfoForm from "./BillingInfoForm";
+import ShippingDetails from "./ShippingDetails";
 import {
   FormContext,
   FormContextProvider,
   useOrderFormContext,
-} from '../../../Contexts/formContext';
-import { FormProvider, useForm, useFormContext } from 'react-hook-form';
+} from "../../../Contexts/formContext";
+import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import {
   useAddBillingDetailsMutation,
   useGetStripeKeyQuery,
-} from '../../../features/services/RTK/Api';
-import { useSelector } from 'react-redux';
-import { User } from '../../../interfaces/Payload';
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
+} from "../../../features/services/RTK/Api";
+import { useSelector } from "react-redux";
+import { User } from "../../../interfaces/Payload";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import { useLocation, useParams } from "react-router-dom";
 
 export interface BillingData {
   first_name: string;
@@ -31,57 +32,21 @@ export interface BillingData {
 }
 
 const OrderForm = () => {
-  const [BillingDetails] = useAddBillingDetailsMutation();
-  const user: User = useSelector((state: any) => state?.user?.payload);
-  const [step, setStep] = useState(1);
-  const [stripeApiKey, setStripeApiKey] = useState('');
-  const handleNext = () => {
-    setStep(step + 1);
-  };
-
-  const handleBack = () => {
-    setStep(step - 1);
-  };
-  const { formData, setFormData } = useOrderFormContext();
-
-  const methods = useForm();
-  const { register, handleSubmit } = methods;
-  console.log('formdata', formData);
-  const onSubmit = (data: any) => {
-    let formData = new FormData();
-    formData.append('first_name', data?.first_name);
-    formData.append('email', data?.email);
-    formData.append('address1', data?.address1);
-    formData.append('address2', data?.address2);
-    formData.append('city', data?.city);
-    formData.append('country', data?.country);
-    formData.append('phone', data?.phone);
-    formData.append('state', data?.state);
-    formData.append('zip', data?.zip);
-    console.log('data', data);
-    BillingDetails({
-      id: user._id,
-      payload: formData,
-    })
-      .then((res) => {
-        console.log('success', res);
-      })
-      .catch((err) => console.log(err?.message));
-    setFormData(data);
-  };
+  const [stripeApiKey, setStripeApiKey] = useState("");
+  
 
   const [formStep, setFormStep] = useState(1);
 
   const nextFormStep = () => setFormStep((currentStep) => currentStep + 1);
 
   const prevFormStep = () => setFormStep((currentStep) => currentStep - 1);
-  const { data: StripeKey } = useGetStripeKeyQuery('');
+  const { data: StripeKey } = useGetStripeKeyQuery("");
 
   useEffect(() => {
     setStripeApiKey(StripeKey?.stripeApiKey);
   }, [StripeKey]);
 
-  console.log('STRIPEKEY', stripeApiKey);
+  console.log("STRIPEKEY", stripeApiKey);
 
   return (
     <div className="flex items-center justify-center">
@@ -90,7 +55,7 @@ const OrderForm = () => {
         <div className="flex mb-4">
           <div
             className={`w-1/2 border-r border-gray-400 ${
-              formStep === 1 ? 'bg-blue-500 text-white' : 'bg-gray-200'
+              formStep === 1 ? "bg-blue-500 text-white" : "bg-gray-200"
             } p-2 text-center cursor-pointer`}
             onClick={() => setFormStep(1)}
           >
@@ -98,7 +63,7 @@ const OrderForm = () => {
           </div>
           <div
             className={`w-1/2 ${
-              formStep === 2 ? 'bg-blue-500 text-white' : 'bg-gray-200'
+              formStep === 2 ? "bg-blue-500 text-white" : "bg-gray-200"
             } p-2 text-center cursor-pointer`}
             onClick={() => setFormStep(2)}
           >
@@ -106,7 +71,7 @@ const OrderForm = () => {
           </div>
           <div
             className={`w-1/2 ${
-              formStep === 3 ? 'bg-blue-500 text-white' : 'bg-gray-200'
+              formStep === 3 ? "bg-blue-500 text-white" : "bg-gray-200"
             } p-2 text-center cursor-pointer`}
             onClick={() => setFormStep(3)}
           >
