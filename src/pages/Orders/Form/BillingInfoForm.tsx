@@ -11,6 +11,7 @@ import {
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 
 import { useLocation, useNavigate } from "react-router-dom";
+import { useToast } from "../../../features/Toast/ToastContext";
 
 const BillingInfoForm = ({
   formStep,
@@ -24,6 +25,7 @@ const BillingInfoForm = ({
   const user: any = useSelector((state: RootState) => state.user.payload);
   const { handleSubmit } = useForm();
   const { formData } = useOrderFormContext();
+  const toast = useToast();
   console.log("FORMDATA", formData);
   const { search, state } = useLocation();
   const query = search.replace("?", "").split(/[&=]/).pop();
@@ -33,17 +35,27 @@ const BillingInfoForm = ({
   const elements = useElements();
   const nav = useNavigate();
   const [RemoveCartItems] = useRemoveAllCartMutation();
+  const singleProduct = {
+    description: state.description,
+    image: state?.images[0]?.url,
+    name: state.name,
+    price: state.price,
+    quantity: 1,
+    product: state._id,
+    user: user._id,
+  };
+
   const paymentData = {
     amount: Math.round(formData && formData?.totalAmount * 100),
   };
   const payBtn = useRef(null);
   const order: any = {
     shippingInfo: user?.billing_info,
-    orderItems: query == "true" ? [state] : cartItems,
-    itemsPrice: formData.totalAmount,
+    orderItems: query == "true" ? [singleProduct] : cartItems,
+    itemsPrice: query == "true" ? singleProduct.price : formData.totalAmount,
     taxPrice: 20,
     shippingPrice: 20,
-    totalPrice: formData.totalAmount,
+    totalPrice: query == "true" ? singleProduct.price : formData.totalAmount,
   };
 
   const onSubmit = async (data: any) => {
@@ -89,16 +101,20 @@ const BillingInfoForm = ({
           status: result.paymentIntent.status,
         };
         CreateOrder(order)
-          .then((res) => {
-            console.log("ORDER CREATED SUCCESSFULLY", res);
-            nav("/order-success");
-            RemoveCartItems("");
+          .then((res: any) => {
+            console.log("ress", res);
+            if (res.data?.success) {
+              nav("/order-success");
+              toast.open("Order created successfully", "success");
+            } else {
+              toast.open(res.error.data.message, "error");
+            }
+
+            if (query !== "true") RemoveCartItems("");
           })
           .catch((err) => {
             console.log(err?.message);
           });
-
-        // history.push('/success');
       } else {
         alert("There's some issue while processing payment ");
       }

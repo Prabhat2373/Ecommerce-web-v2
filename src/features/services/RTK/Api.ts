@@ -1,22 +1,22 @@
-import { Product, ProductsPayloadType } from '../../../Types/Products';
-import { GenericResponse } from '../../../Types/Responses';
-import { LoginPayload } from '../../../interfaces/Payload';
+import { Product, ProductsPayloadType } from "../../../Types/Products";
+import { GenericResponse } from "../../../Types/Responses";
+import { LoginPayload } from "../../../interfaces/Payload";
 // Need to use the React-specific entry point to import createApi
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 // Define a service using a base URL and expected endpoints
 export const CoreApi = createApi({
-  reducerPath: 'CoreApi',
+  reducerPath: "CoreApi",
   baseQuery: fetchBaseQuery({
     baseUrl:
-      import.meta.env.VITE_APP_MY_ENVIRONMENT === 'prod'
+      import.meta.env.VITE_APP_MY_ENVIRONMENT === "prod"
         ? import.meta.env.VITE_APP_PROD_BASE_URL
         : import.meta.env.VITE_APP_DEV_BASE_URL,
-    credentials: 'include',
+    credentials: "include",
     prepareHeaders: (headers, { getState }) => {
       headers.set(
-        'authorization',
-        `bearer ${String(localStorage.getItem('token'))}`
+        "authorization",
+        `bearer ${String(localStorage.getItem("token"))}`
       );
       return headers;
     },
@@ -35,33 +35,33 @@ export const CoreApi = createApi({
       query: (args) => ({
         url: `cart/${args?.id}`,
         body: args.payload,
-        method: 'POST',
+        method: "POST",
       }),
     }),
     removeCartItem: builder.mutation({
       query: (id: number | string) => ({
         url: `cart/${id}`,
-        method: 'DELETE',
+        method: "DELETE",
       }),
     }),
     CreateUser: builder.mutation({
       query: (args) => ({
-        url: 'register',
+        url: "register",
         body: args,
-        method: 'POST',
-        redirect: 'follow',
+        method: "POST",
+        redirect: "follow",
       }),
     }),
     getCurrentUser: builder.query<any, any>({
       query: () => ({
-        url: '/me',
+        url: "/me",
       }),
     }),
     LoginUser: builder.mutation<LoginPayload, any>({
       query: (args) => ({
-        url: 'login',
+        url: "login",
         body: args,
-        method: 'POST',
+        method: "POST",
         // redirect: 'follow'
       }),
     }),
@@ -69,7 +69,7 @@ export const CoreApi = createApi({
       query: (args) => ({
         url: `/billing_info/${args.id}`,
         body: args.payload,
-        method: 'POST',
+        method: "POST",
       }),
     }),
     getBillingDetails: builder.query({
@@ -96,14 +96,14 @@ export const CoreApi = createApi({
       query: (args) => ({
         url: `/admin/product/new`,
         body: args,
-        method: 'POST',
+        method: "POST",
       }),
     }),
     paymentProcess: builder.mutation<any, any>({
       query: (args) => ({
         url: `/payment/process`,
         body: args,
-        method: 'POST',
+        method: "POST",
         headers: {
           Authorization: `Bearer ${import.meta.env.REACT_APP_STRIPE_API_KEY}`,
         },
@@ -114,17 +114,17 @@ export const CoreApi = createApi({
       query: (args) => ({
         url: `/order/new`,
         body: args,
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         // params: args,
       }),
     }),
     removeAllCart: builder.mutation({
       query: () => ({
-        url: '/cart',
-        method: 'DELETE',
+        url: "/cart",
+        method: "DELETE",
       }),
     }),
     getStripeKey: builder.query<any, any>({
@@ -135,25 +135,26 @@ export const CoreApi = createApi({
     }),
     getMyOrders: builder.query<any, any>({
       query: () => ({
-        url: '/orders/me',
+        url: "/orders/me",
       }),
     }),
     createReview: builder.mutation<any, any>({
       query: (args) => ({
-        url: '/review',
-        method: 'PUT',
+        url: "/review",
+        method: "PUT",
         body: args,
       }),
     }),
-    getProductReviews: builder.query<any, any>({
+    getProductReviews: builder.mutation<any, any>({
       query: (args) => ({
         url: `/reviews?id=${args}`,
+        method: "GET",
       }),
     }),
     logout: builder.mutation<any, any>({
       query: () => ({
-        url: '/logout',
-        method: 'POST',
+        url: "/logout",
+        method: "POST",
       }),
     }),
   }),
@@ -181,5 +182,5 @@ export const {
   useGetMyOrdersQuery,
   useRemoveAllCartMutation,
   useCreateReviewMutation,
-  useGetProductReviewsQuery,
+  useGetProductReviewsMutation
 } = CoreApi;

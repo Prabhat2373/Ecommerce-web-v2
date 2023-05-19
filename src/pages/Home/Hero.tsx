@@ -1,35 +1,36 @@
-import React, { useState } from 'react';
-import Sections from '../../components/Sections';
-import { useNavigate } from 'react-router-dom';
-import WomenImg from '../../Assets/images/shopping-women.jpg';
-import { useSelector } from 'react-redux';
-import { useToast } from '../../features/Toast/ToastContext';
-import Modal from '../../components/Modal/Modal';
-import { RootState } from '../../store';
-import { useGetProductsQuery } from '../../features/services/RTK/Api';
-import women2 from '../../Assets/images/women-1.jpg';
-import heroImg1 from '../../Assets/images/cloths-men.jpg';
-import heroImg2 from '../../Assets/images/shopping-bag.jpg';
-import urbanMen from '../../Assets/images/urban-men.jpg';
+import React, { useState } from "react";
+import Sections from "../../components/Sections";
+import { useNavigate } from "react-router-dom";
+import WomenImg from "../../Assets/images/shopping-women.jpg";
+import { useSelector } from "react-redux";
+import { useToast } from "../../features/Toast/ToastContext";
+import Modal from "../../components/Modal/Modal";
+import { RootState } from "../../store";
+import { useGetProductsQuery } from "../../features/services/RTK/Api";
+import women2 from "../../Assets/images/women-1.jpg";
+import heroImg1 from "../../Assets/images/cloths-men.jpg";
+import heroImg2 from "../../Assets/images/shopping-bag.jpg";
+import urbanMen from "../../Assets/images/urban-men.jpg";
 
 export default function Hero() {
   const [isOpen, setIsOpen] = useState(false);
-  const { data: item } = useGetProductsQuery('');
+  const { data: item } = useGetProductsQuery("");
   const ClothsItems =
     item?.products?.filter(
-      (el: any, index: number) => el?.category === 'fashion'
+      (el: any, index: number) => el?.category === "fashion"
     ) ?? [];
   const ElectronicsItems = item?.products?.filter(
-    (el: any, index: number) => el?.category === 'electronics'
+    (el: any, index: number) => el?.category === "electronics"
   );
   const OthersItems = item?.products?.filter(
     (el: any, index: number) =>
-      el?.category !== 'fashion' && el?.category !== 'electronics'
+      el?.category !== "fashion" && el?.category !== "electronics"
   );
   const toast = useToast();
   const navigate = useNavigate();
-  const showToast = (message: any) => toast.open(`${message}`);
-  console.log('item', item);
+  const showToast = (message: any) => toast.open(`${message}`, "success");
+
+  console.log("item", item);
   return (
     <>
       <div className="main-parent grid md:grid-cols-2 gap-3 mt-16 ">
@@ -52,7 +53,7 @@ export default function Hero() {
                 className="shop-btns p-3 border-2 text-white font-semibold mt-3 hover:bg-white hover:text-black transition-all duration-200"
                 onClick={() => {
                   // navigate('/products?womens')
-                  showToast('This is test');
+                  showToast("This is test");
                 }}
               >
                 Purchase Now
@@ -79,7 +80,7 @@ export default function Hero() {
                 <button
                   className="shop-btns p-3 border-2 text-white font-semibold mt-3 hover:bg-white hover:text-black transition-all duration-200"
                   onClick={() => {
-                    navigate('/products?category=fashion');
+                    navigate("/products?category=fashion");
                   }}
                 >
                   Purchase Now
@@ -105,7 +106,7 @@ export default function Hero() {
                 <button
                   className="shop-btns p-3 border-2 text-white font-semibold mt-3 hover:bg-white hover:text-black transition-all duration-200"
                   onClick={() => {
-                    navigate('/products?mensTrends');
+                    navigate("/products?mensTrends");
                   }}
                 >
                   Purchase Now
@@ -131,7 +132,7 @@ export default function Hero() {
                 <button
                   className="shop-btns p-3 border-2 text-white font-semibold mt-3 hover:bg-white hover:text-black transition-all duration-200"
                   onClick={() => {
-                    navigate('/products?boys');
+                    navigate("/products?boys");
                   }}
                 >
                   Purchase Now
@@ -157,7 +158,7 @@ export default function Hero() {
                 <button
                   className="shop-btns p-3 border-2 text-white font-semibold mt-3 hover:bg-white hover:text-black transition-all duration-200"
                   onClick={() => {
-                    navigate('/products?brand');
+                    navigate("/products?brand");
                   }}
                 >
                   Purchase Now

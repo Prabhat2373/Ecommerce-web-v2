@@ -7,7 +7,7 @@ import {
   useCreateReviewMutation,
   useGetAllCartQuery,
   useGetProductByIdQuery,
-  useGetProductReviewsQuery,
+  useGetProductReviewsMutation,
 } from "../../features/services/RTK/Api";
 import { Product } from "../../Types/Products";
 import { useSelector } from "react-redux";
@@ -27,7 +27,7 @@ const ProductView = () => {
   const id = User?._id;
   const productId = query?.id;
   const { data: ProductById } = useGetProductByIdQuery(productId ?? "");
-  const { data: GetReviews } = useGetProductReviewsQuery(productId);
+  const [GetReviews] = useGetProductReviewsMutation();
   const [Product, setProduct] = useState<Product>();
   const [productReviews, setProductReviews] = useState<any>([]);
   const [quantity, setQuantity] = useState(0);
@@ -43,13 +43,12 @@ const ProductView = () => {
   const { register, handleSubmit } = useForm();
 
   const handleBuyNow = async () => {
-
     nav(`/order/new?id=${Product?._id}&single=true`, {
       state: Product,
-    })
+    });
   };
 
-  function AddCart(quantity: any) {
+  function AddCart(quantity: number) {
     setIsLoading(true);
     AddToCart({
       payload: {
@@ -68,12 +67,35 @@ const ProductView = () => {
       setIsLoading(false);
     });
   }
+  const GetProductReviews = async () => {
+    const res: any = await GetReviews(productId);
+
+    setProductReviews(res.data.reviews);
+  };
+
+  const AddReview = (data: any) => {
+    const formData = new FormData();
+    formData.append("rating", formRating.toString());
+    formData.append("comment", data.comment);
+    formData.append("productId", productId ? productId : "");
+
+    PostReview(formData)
+      .then((res: any) => {
+        toast.open(res?.data?.message, "success");
+        GetProductReviews();
+        setIsOpen(false);
+      })
+      .catch((err) => {
+        toast.open(err?.message, "error");
+      });
+  };
   React.useEffect(() => {
     setProduct(ProductById?.product);
     setRatings(ProductById?.product.ratings ? ProductById?.product.ratings : 0);
   }, [productId, ProductById, Product]);
   React.useEffect(() => {
-    setProductReviews(GetReviews?.reviews);
+    GetProductReviews();
+    // setProductReviews(GetReviews(productId).then((res) => res));
   }, [GetReviews]);
 
   console.log("product", Product);
@@ -243,23 +265,7 @@ const ProductView = () => {
       <Modal
         child={
           <>
-            <form
-              onSubmit={handleSubmit((data) => {
-                const formData = new FormData();
-                formData.append("rating", formRating.toString());
-                formData.append("comment", data.comment);
-                formData.append("productId", productId ? productId : "");
-
-                PostReview(formData)
-                  .then((res: any) => {
-                    toast.open(res?.data?.message, "success");
-                    setIsOpen(false);
-                  })
-                  .catch((err) => {
-                    toast.open(err?.message, "error");
-                  });
-              })}
-            >
+            <form onSubmit={handleSubmit(AddReview)}>
               <div className="flex flex-col gap-4">
                 <div>
                   <span className="font-medium text-lg">Rate This Product</span>

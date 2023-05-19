@@ -1,23 +1,23 @@
-import React from 'react';
-import { XMarkIcon } from '@heroicons/react/24/outline';
-import { useTimeout } from '../features/hooks/useTimeout';
+import React from "react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import { useTimeout } from "../features/hooks/useTimeout";
 
 const Toast = (props: {
   close: () => void;
   children: any;
-  type?: 'success' | 'error' | 'warning';
+  type?: "success" | "error" | "warning";
 }) => {
-  useTimeout(props.close, 5000);
+  useTimeout(props.close, 155000);
   if (true) {
     return (
       <div
         className={`toast ${
-          props.type === 'success'
-            ? 'bg-blue-500'
-            : props.type === 'error'
-            ? 'bg-red-500'
-            : 'bg-orange-400'
-        } bg-blue-400 rounded-lg flex items-center text-white`}
+          props.type === "success"
+            ? "bg-blue-500"
+            : props.type === "error"
+            ? "bg-red-500"
+            : "bg-orange-400"
+        } bg-blue-400 rounded-lg flex items-center text-white w-1/3`}
       >
         <div className="toast__text">{props.children}</div>
         <div>
