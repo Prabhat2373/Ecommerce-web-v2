@@ -7,7 +7,7 @@ const Toast = (props: {
   children: any;
   type?: "success" | "error" | "warning";
 }) => {
-  useTimeout(props.close, 155000);
+  useTimeout(props.close, 5000);
   if (true) {
     return (
       <div
@@ -17,7 +17,7 @@ const Toast = (props: {
             : props.type === "error"
             ? "bg-red-500"
             : "bg-orange-400"
-        } bg-blue-400 rounded-lg flex items-center text-white w-1/3`}
+        } bg-blue-400 rounded-lg flex items-center text-white justify-between w-[16%]`}
       >
         <div className="toast__text">{props.children}</div>
         <div>

@@ -32,7 +32,7 @@ const OrderSummary = ({
   const query = search.replace("?", "").split(/[&=]/).pop();
   console.log("search", search);
   console.log("query", query);
-  console.log("state", state);
+  console.log("state", state);  
 
   const { setFormData, formData } = useOrderFormContext();
   const { data: CartItems, refetch: FetchMore } = useGetAllCartQuery(User?._id);

@@ -44,7 +44,7 @@ export const ToastContextProvider: FC<{
     <ToastContext.Provider value={contextValue}>
       {children}
       {createPortal(
-        <div className="toasts-wrapper flex justify-end w-full">
+        <div className="toasts-wrapper flex justify-end w-full flex-col gap-4 items-end">
           {toasts.map((toast: { id: string; content: any; type: any }) => (
             <Toast
               key={toast.id}
