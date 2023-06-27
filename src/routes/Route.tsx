@@ -1,8 +1,8 @@
-import { Outlet } from 'react-router-dom';
-import { publicRoutes } from './PublicRoutes';
-import { routes } from './RouteList';
-import ProtectedRoute from '../components/ProtectedRoute';
-import AppLayout from '../layout/AppLayout';
+import { Outlet } from "react-router-dom";
+import { publicRoutes } from "./PublicRoutes";
+import { routes } from "./RouteList";
+import ProtectedRoute from "../components/ProtectedRoute";
+import AppLayout from "../layout/AppLayout";
 
 export interface RouteListProps {
   id: string;
@@ -38,9 +38,9 @@ export const AllPages = () => {
     {
       element: (
         <>
-          <ProtectedRoute>
-            <AppLayout />
-          </ProtectedRoute>
+          {/* <ProtectedRoute> */}
+          <AppLayout />
+          {/* </ProtectedRoute> */}
         </>
       ),
       children: [...childRoute, ...parentRoute],
